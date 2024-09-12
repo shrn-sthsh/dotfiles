@@ -29,7 +29,7 @@ set $menu wofi --show "run,drun,dmenu" \
 
 ### Output configuration
 # Wallpaper
-set $wallpaper "$HOME/Pictures/Wallpapers/Sky/atik-sulianami-dBN9tclZL8M-unsplash.jpg"
+set $wallpaper "$HOME/Pictures/Wallpapers/Sky/night-city-skyscrapers-night-bridge-4k_1538065958-1258256741.jpg"
 output * bg $wallpaper fill
 
 # Display
@@ -223,33 +223,33 @@ set $lock_screen swaylock \
   --image $wallpaper \
   --indicator-radius 100 \
 	--indicator-thickness 8 \
-  --indicator-y-position 800 \
-  --font JetBrainsMonoNerdFont \
-  --font-size 48 \
-	--ring-color 6699cc \
-  --text-color ebdbb2ff \
-	--inside-color 6699cc3f \
-	--ring-wrong-color FF761A \
-	--inside-wrong-color FF761A3f \
-  # --text-wrong-color ebdbb2ff \
-	--ring-caps-lock-color d79921 \
-	--inside-caps-lock-color d799213f \
-  --text-caps-color ebdbb2ff \
-	--ring-ver-color 689d68 \
-	--inside-ver-color 689d683f \
-  --text-ver-color ebdbb2ff \
-  --layout-bg-color fbf1c7 \
-  --line-uses-inside \
-  --line-uses-ring
+ #  --indicator-y-position 800 \
+ #  --font JetBrainsMonoNerdFont \
+ #  --font-size 48 \
+	# --ring-color 6699cc \
+ #  --text-color ebdbb2ff \
+	# --inside-color 6699cc3f \
+	# --ring-wrong-color FF761A \
+	# --inside-wrong-color FF761A3f \
+ #  # --text-wrong-color ebdbb2ff \
+	# --ring-caps-lock-color d79921 \
+	# --inside-caps-lock-color d799213f \
+ #  --text-caps-color ebdbb2ff \
+	# --ring-ver-color 689d68 \
+	# --inside-ver-color 689d683f \
+ #  --text-ver-color ebdbb2ff \
+ #  --layout-bg-color fbf1c7 \
+ #  --line-uses-inside \
+ #  --line-uses-ring
 
-bindsym $mod+Shift+s exec $lock_screen
+bindsym $mod+Shift+s exec $HOME/System/sway/screenshot
 
 # Idle configuration
-exec swayidle -w \
-        timeout 300 '$lock_screen -f -c 000000' \
-        timeout 0 'swaymsg "output * power off"' \
-        resume 'swaymsg "output * power on"' \
-        before-sleep '$lock_screen -f -c 000000'
+# exec swayidle -w \
+#         timeout 300 '$lock_screen -f -c 000000' \
+#         timeout 0 'swaymsg "output * power off"' \
+#         resume 'swaymsg "output * power on"' \
+#         before-sleep '$lock_screen -f -c 000000'
 
 bindsym XF86Sleep exec swayidle -w \
         timeout 0 '$lock_screen -f -c 000000' \
