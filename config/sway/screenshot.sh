@@ -1,6 +1,10 @@
 #!/bin/bash
 
 FILENAME="screenshot-`date +%F-%T`"
-# grim -g "$(slurp)" ~/Pictures/Screenshots/$FILENAME.png | swappy -f -
+FILEPATH="$HOME/Pictures/Screenshots/$FILENAME.png"
 
-grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') - | wl-copy -t image/png
+unclutter --timeout 0 &
+grim -g "$(slurp)" $FILEPATH
+
+killall unclutter
+wl-copy < $FILEPATH

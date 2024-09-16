@@ -23,7 +23,7 @@ unset rc
 
 # Import bash aliases and functions
 if [ -f ~/.dotfiles/bash/alias.sh ]; then
-  source ~/.bash/alias.sh
+  source ~/.dotfiles/bash/alias.sh
 fi
 if [ -f ~/.dotfiles/bash/vars.sh ]; then
   source ~/.dotfiles/bash/vars.sh

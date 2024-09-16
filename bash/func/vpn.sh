@@ -32,15 +32,16 @@ function vpn ()
   elif [ $1 == "disconnect" ] || [ $1 == "disc" ]; then
     local pids=$(pgrep openconnect)
     if [ -n "$pids" ]; then
-      local killed=$(wc -w <<< $pids)
+      local alive=$(wc -w <<< $pids)
       for pid in $pids; do
         sudo kill -9 "$pid"
-        ((killed++)) 
+        ((alive--)) 
       done
-      if [ "$killed" -eq 0 ]; then
-          echo "STATUS: VPN connection closed"
+
+      if [ "$alive" -eq 0 ]; then
+        echo "STATUS: VPN connection closed"
       else
-          echo "STATUS: Unable to close VPN instance"
+        echo "STATUS: Unable to close VPN instance"
       fi
     else
       echo "STATUS: not connected to VPN"

@@ -20,7 +20,7 @@ alias ll='exa -lh'
 alias tree='exa --tree'
 
 # file content
-alias cat='bat'
+alias cat='bat --theme=ansi'
 
 # changing directories
 alias cd='z'
