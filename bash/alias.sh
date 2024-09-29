@@ -10,14 +10,23 @@ alias vol='wpctl set-volume -l 1.0 @DEFAULT_SINK@'
 # keyboard
 alias kbd='brightnessctl --device="kbd_backlight" set'
 
+# boot volume
+alias boot='sudo bash $HOME/.dotfiles/boot/osx-boot.sh'
+
 ## Commands
 # status
 alias fetch='fastfetch'
 
 # files
-alias ls='exa'
-alias ll='exa -lh'
-alias tree='exa --tree'
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  alias ls='eza'
+  alias ll='eza -lh'
+  alias tree='eza --tree'
+else
+  alias ls='exa'
+  alias ll='exa -lh'
+  alias tree='exa --tree'
+fi
 
 # file content
 alias cat='bat --theme=ansi'
@@ -45,6 +54,7 @@ alias open='xdg-open'
 alias wifi='nmcli device wifi'
 
 # neovim
+alias vim='nvim'
 alias nvimdiff='nvim -d'
 
 # tmux
@@ -58,7 +68,11 @@ alias kill-server='tmux kill-server'
 export PATH=$PATH:$HOME/.cargo/bin/
 
 # pacman
-alias pacman='pacaptr'
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  alias pacman='pacapt'
+else
+  alias pacman='pacaptr'
+fi
 
 # lock screen
 alias lockscreen='vlock'

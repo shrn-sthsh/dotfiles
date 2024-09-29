@@ -10,6 +10,7 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
     PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
 export PATH
+export PATH=/opt/homebrew/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 # User specific aliases and functions
 if [ -d ~/.bashrc.d ]; then
@@ -85,8 +86,8 @@ eval "$(zoxide init bash)"
 # Set bash prompt
 set_bash_prompt
 
-# Double console font size if running in TTY
-if [[ $(tty) =~ "/dev/tty" ]]; then
+# Double console font size if running in Linux TTY
+if test -f "/etc/os-release" && [[ $(tty) =~ "/dev/tty" ]]; then
   setfont -d
   sleep 1.5
 fi

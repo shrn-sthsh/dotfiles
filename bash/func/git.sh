@@ -1,12 +1,22 @@
 #!/bin/bash
 
-# github token
-function gitkey ()
+# git with github key
+function git-with-key()
 {
-  unzip $HOME/Projects/git.zip gitkey && \
-    cat gitkey | xargs wl-copy #&& \
-    rm gitkey
+  if [ "$1" == "key" ]; then
+    if [ "$2" == "-v" ] || [ "$2" == "--verbose" ]; then
+      unzip $HOME/Projects/gitkey.zip gitkey && \
+        cat gitkey && rm gitkey 
+    else
+      unzip $HOME/Projects/gitkey.zip gitkey && \
+        cat gitkey | pbcopy && \
+        rm gitkey 
+    fi
+  else
+    git $@
+  fi
 }
+alias git='git-with-key'
 
 # current branch 
 function parse_git_branch ()
