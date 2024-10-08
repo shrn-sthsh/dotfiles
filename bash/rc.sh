@@ -2,19 +2,24 @@
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-  . /etc/bashrc
+  source /etc/bashrc
 fi
 
 # User specific environment
 if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+  PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
 export PATH
-export PATH=/opt/homebrew/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  export PATH=/opt/homebrew/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
+fi
+
+# Script sucesses variable
+sucess=true
 
 # User specific aliases and functions
-if [ -d ~/.bashrc.d ]; then
-  for rc in ~/.bashrc.d/*; do
+if [ -d $HOME/.bashrc.d ]; then
+  for rc in $HOME/.bashrc.d/*; do
     if [ -f "$rc" ]; then
       . "$rc"
     fi
@@ -23,14 +28,18 @@ fi
 unset rc
 
 # Import bash aliases and functions
-if [ -f ~/.dotfiles/bash/alias.sh ]; then
-  source ~/.dotfiles/bash/alias.sh
+if [ -f $HOME/.dotfiles/bash/alias.sh ]; then
+  source $HOME/.dotfiles/bash/alias.sh
+  alias_code=$?
+  if [ "$alias_code" -eq 1 ]; then
+    sucess=false
+  fi
 fi
-if [ -f ~/.dotfiles/bash/vars.sh ]; then
-  source ~/.dotfiles/bash/vars.sh
+if [ -f $HOME/.dotfiles/bash/vars.sh ]; then
+  source $HOME/.dotfiles/bash/vars.sh
 fi
 
-# Check if the ~/.bash/functions/ directory exists
+# Check if the $HOME/.bash/functions/ directory exists
 if [ -d "$HOME/.dotfiles/bash/func/" ]; then
   for script in "$HOME/.dotfiles/bash/func/"*.sh; do
     if [ -f "$script" ]; then
@@ -80,19 +89,16 @@ fi
 
 
 ###################################### Start up #####################################
-# Zoxide set up
-eval "$(zoxide init bash)"
-
 # Set bash prompt
 set_bash_prompt
 
 # Double console font size if running in Linux TTY
-if test -f "/etc/os-release" && [[ $(tty) =~ "/dev/tty" ]]; then
-  setfont -d
+if [[ "$OSTYPE" == "linux-gnu" ]] && [[ $(tty) =~ "/dev/tty" ]]; then
+  setfont ter-u32n
   sleep 1.5
 fi
 
 # Write start up system information if iteractive session
-if [[ $- == *i* ]]; then
+if [[ $- == *i* ]] && [ "$sucess" = true ]; then
   clean
 fi

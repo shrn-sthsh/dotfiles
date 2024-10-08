@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # toggle between TTY and window-manager
 function switch_graphical_mode ()
 {

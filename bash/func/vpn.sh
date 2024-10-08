@@ -9,8 +9,37 @@ function vpn ()
     return
   fi
 
+  # key
+  if [ "$1" == "key" ]; then
+    if [ "$2" == "gt" ]; then
+      local keypath="$HOME/Projects/gtvpn.zip"
+      local keyfile="gtvpnkey"
+    else
+      local keypath="$2"
+      local keyfile=$(basename "$HOME/Projects/vpn.zip" .zip | sed 's/^//;s/.*\///')
+    fi 
+
+    if [ "$3" == "-v" ] || [ "$3" == "--verbose" ]; then
+      unzip $keypath $keyfile && \
+        cat $keyfile && rm $keyfile
+    elif [ "$OSTYPE" == "darwin"* ]; then
+      unzip $keypath $keyfile && \
+        cat $keyfile | wl-copy && \
+        rm $keyfile
+    elif [ "$OSTYPE" == "linux-gnu" ]; then
+      if [ "$XDG_SESSION_TYPE" == "wayland" ]; then
+        unzip $keypath $keyfile && \
+          cat $keyfile | wl-copy && \
+          rm $keyfile 
+      else 
+        zip $keypath $keyfile && \
+          cat $keyfile | xsel --clipboard && \
+          rm $keyfile
+      fi
+    fi
+
   # connect
-  if [ $1 == "connect" ] || [ $1 == "conn" ]; then
+  elif [ $1 == "connect" ] || [ $1 == "conn" ]; then
     local pids=$(pgrep openconnect)
     if [ -n "$pids" ]; then
       echo "ERROR: Already connected to VPN"
