@@ -11,7 +11,8 @@
     // Global configuration
     // -------------------------------------------------------------------------
 
-    "layer": "bottom",
+    "layer": "top",
+    "output": ["*"],
     "position": "top",
 
     // If height property would be not present, it'd be calculated dynamically
@@ -217,7 +218,7 @@
     {
       "critical-threshold": 80,
       "interval": 5,
-      "format": "TEMP: {temperatureC}°C",
+      "format": "TEMP: {temperatureF}°F",
       "format-icons": 
       [
           "", // Icon: temperature-empty
