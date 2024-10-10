@@ -18,12 +18,22 @@ function install_source ()
     alias pacman='sudo pacaptr'
   fi
   
+  # Check if user is sudoer
+  local sudoer=true
+  if ! sudo -v 2>/dev/null; then
+    sudoer=false
+  fi 
+  if [ "$sudoer" = false ]; then
+    echo -e "\nERROR: User must be on sudoer list to install packages"
+    return 1
+  fi
+
   # Attempt to install the command
   if ! sudo -n -v 2>/dev/null; then
     echo "" && sudo -v && echo ""
   fi
   if ! sudo -n -v 2>/dev/null; then
-    echo -e "ERROR: Need super user priviledges to install source packages"
+    echo -e "\nERROR: Need super user priviledges to install source packages"
     return 1
   fi
   pacman -S "$cmd" -- -q -y > /dev/null 2>&1
