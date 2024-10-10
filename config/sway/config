@@ -1,23 +1,79 @@
 include /etc/sway/config.d/*
 
-# Super key
-set $mod Mod4
+# Color configuration
+  # Gruvbox
+  # see https://github.com/morhetz/gruvbox-contrib/blob/master/color.table
+  # set $bg #282828 
+  # set $bg_2 #504945
+  # set $fg #ebdbb2
+  # set $fg_1 #FBF1C7
+  # set $fg_2 #D5C4A1
+  # set $red #cc241d
+  # set $green #98971a
+  # set $yellow #d79921
+  # set $blue #458588
+  # set $blue_faded #076678
+  # set $purple #b16286
+  # set $aqua #689d68
+  # set $gray #a89984
+  # set $darkgray #1d2021
 
-# Home row direction keys, like vim
-set $left  h
-set $down  j
-set $up    k
-set $right l
+  # Falcon
+  set $bg #161636 
+  set $bg_2 #202040
+  set $fg #393959
+  set $fg_1 #434363
+  set $fg_2 #4d4d6d
+  set $red #FF761A
+  set $green #9BCCBF
+  set $yellow #FFC552
+  set $blue #6699cc
+  set $blue_faded #a1bce1
+  set $purple #635196
+  set $aqua #BFDAFF
+  set $gray #99A4BC
+  set $darkgray #2a2a4a
 
-# Your preferred terminal emulator
-set $term foot
+# Style 
+  # Theme https://thomashunter.name/i3-configurator/
+  # class                 border  bground text    indicator child_border
+  client.focused          $blue   $blue   #FFFFFF $blue     $blue
+  client.focused_inactive $bg_2   #5F676A $fg     #484E50   #5F676A
+  client.unfocused        $bg_2   #282828 #888888 #292D2E   #222222
+  client.urgent           #2F343A #FF761A $fg_1   #FF761A   #FF761A
+  client.placeholder      #1D2021 #0C0C0C $fg     #000000   #0C0C0C
+  
+  # Wallpaper
+  set $wallpaper "$HOME/Pictures/Wallpapers/Trees/wolfgang-hasselman-yellow-tree.jpg"
+  output * bg $wallpaper fill
 
-# Application launcher
-set $menu wofi --show "run,drun,dmenu" \
-  --prompt "search programs" \
-  --width 35% \
-  --height 35% \
-  | xargs swaymsg exec --
+  # Display
+  gaps inner 4
+  gaps outer 2
+
+  # Set font 
+  font pango:JetBrainsMonoNerdFont 10
+  font pango:JetBrainsMonoNerdFont 10px
+
+# Basics
+  # Super Key
+  set $mod Mod4
+
+  # Home row direction keys, like vim
+  set $left  h
+  set $down  j
+  set $up    k
+  set $right l
+
+  # Your preferred terminal emulator
+  set $term foot
+
+  # Application launcher
+  set $menu wofi --show "run,drun,dmenu" \
+    --prompt "search programs" \
+    --width 35% \
+    --height 35% \
+    | xargs swaymsg exec --
 
 # Trackpad
 input "1452:851:Apple_MTP_multi-touch" {
@@ -25,6 +81,7 @@ input "1452:851:Apple_MTP_multi-touch" {
   natural_scroll enabled
   middle_emulation enabled
 }
+bindsym XF86LaunchA input type:touchpad events toggle enabled disabled
 
 # Key bindings
   # Start a terminal
@@ -42,6 +99,7 @@ input "1452:851:Apple_MTP_multi-touch" {
   # Change normal to inverse to use left mouse button for resizing and right
   # mouse button for dragging.
   floating_modifier $mod normal
+  seat * hide_cursor 0
 
   # Reload the configuration file
   bindsym $mod+Shift+c reload
@@ -155,9 +213,6 @@ input "1452:851:Apple_MTP_multi-touch" {
   }
   bindsym $mod+r mode "resize"
 
-# Trackpad
-bindsym XF86LaunchA input type:touchpad events toggle enabled disabled
-
 # Display
   # Brightness
   bindsym XF86MonBrightnessUp   exec brightnessctl set 2%+
@@ -167,8 +222,8 @@ bindsym XF86LaunchA input type:touchpad events toggle enabled disabled
   bindsym $mod+Shift+s exec $HOME/System/sway/screenshot.sh
 
 # Screen lock
-bindsym XF86Sleep    exec $HOME/System/sway/lockscreen.sh $wallpaper
-bindsym XF86PowerOff exec $HOME/System/sway/lockscreen.sh $wallpaper
+bindsym XF86Sleep    exec bash $HOME/System/sway/lockscreen.sh $wallpaper
+bindsym XF86PowerOff exec bash $HOME/System/sway/lockscreen.sh $wallpaper
 
 # Audio 
   # Volume
@@ -188,59 +243,4 @@ bindsym XF86PowerOff exec $HOME/System/sway/lockscreen.sh $wallpaper
 bindsym XF86Search exec $menu
 
 # Waybar
-exec_always --no-startup-id sh ~/.config/waybar/launch.sh
-
-# Color configuration
-  # Gruvbox
-  # see https://github.com/morhetz/gruvbox-contrib/blob/master/color.table
-  # set $bg #282828 
-  # set $bg_2 #504945
-  # set $fg #ebdbb2
-  # set $fg_1 #FBF1C7
-  # set $fg_2 #D5C4A1
-  # set $red #cc241d
-  # set $green #98971a
-  # set $yellow #d79921
-  # set $blue #458588
-  # set $blue_faded #076678
-  # set $purple #b16286
-  # set $aqua #689d68
-  # set $gray #a89984
-  # set $darkgray #1d2021
-
-  # Falcon
-  set $bg #161636 
-  set $bg_2 #202040
-  set $fg #393959
-  set $fg_1 #434363
-  set $fg_2 #4d4d6d
-  set $red #FF761A
-  set $green #9BCCBF
-  set $yellow #FFC552
-  set $blue #6699cc
-  set $blue_faded #a1bce1
-  set $purple #635196
-  set $aqua #BFDAFF
-  set $gray #99A4BC
-  set $darkgray #2a2a4a
-
-# Style 
-  # Theme https://thomashunter.name/i3-configurator/
-  # class                 border  bground text    indicator child_border
-  client.focused          $blue   $blue   #FFFFFF $blue     $blue
-  client.focused_inactive $bg_2   #5F676A $fg     #484E50   #5F676A
-  client.unfocused        $bg_2   #282828 #888888 #292D2E   #222222
-  client.urgent           #2F343A #FF761A $fg_1   #FF761A   #FF761A
-  client.placeholder      #1D2021 #0C0C0C $fg     #000000   #0C0C0C
-  
-  # Wallpaper
-  set $wallpaper "$HOME/Pictures/Wallpapers/Sky/night-city-skyscrapers-night-bridge-4k_1538065958-1258256741.jpg"
-  output * bg $wallpaper fill
-
-  # Display
-  gaps inner 4
-  gaps outer 2
-
-  # Set font 
-  font pango:JetBrainsMonoNerdFont 10
-  font pango:JetBrainsMonoNerdFont 10px
+exec_always --no-startup-id bash $HOME/.dotfiles/config/waybar/launch.sh

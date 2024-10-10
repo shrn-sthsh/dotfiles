@@ -8,7 +8,7 @@ swayidle \
 # Locks the screen immediately
 swaylock --image "$1" \
   --indicator-radius 100 \
-	--indicator-thickness 8 \
+  --indicator-thickness 8 \
   --font JetBrainsMonoNerdFont \
   --font-size 48 \
   --text-color=#ffffff \
@@ -17,8 +17,6 @@ swaylock --image "$1" \
   --text-ver-color=#ffffff \
   --text-wrong-color=#ffffff \
 	--bs-hl-color=#4926ae \
-  --indicator-radius=100 \
-  --indicator-thickness=8 \
   --inside-color=#1616363f \
   --inside-clear-color=#4926ae7f \
   --inside-ver-color=#9BCCBF8f \
