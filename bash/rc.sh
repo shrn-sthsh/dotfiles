@@ -9,13 +9,17 @@ fi
 if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
   export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
-export PATH
 if [[ "$OSTYPE" == "darwin"* ]]; then
   export PATH=/opt/homebrew/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
 fi
+if [ -d "$HOME/.bin" ]; then
+  for dir in $(find "$HOME/.bin" -type d -name "bin"); do
+    PATH="$dir:$PATH"
+  done
+fi
 
-# Script sucesses variable
-sucess=true
+# Script successes variable
+success=true
 
 # User specific aliases and functions
 if [ -d $HOME/.bashrc.d ]; then
@@ -28,11 +32,11 @@ fi
 unset rc
 
 # Import bash aliases and functions
-if [ -f $HOME/.dotfiles/bash/alias.sh ]; then
-  source $HOME/.dotfiles/bash/alias.sh
-  alias_code=$?
-  if [ "$alias_code" -eq 1 ]; then
-    sucess=false
+if [ -f "$HOME/.dotfiles/bash/alias.sh" ]; then
+  alias_code=$(source "$HOME/.dotfiles/bash/alias.sh")
+  
+  if [ -n "$alias_code" ]; then
+    success=false
   fi
 fi
 if [ -f $HOME/.dotfiles/bash/vars.sh ]; then
@@ -99,6 +103,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]] && [[ $(tty) =~ "/dev/tty" ]]; then
 fi
 
 # Write start up system information if iteractive session
-if [[ $- == *i* ]] && [ "$sucess" = true ]; then
+if [[ $- == *i* ]] && [ "$success" = true ]; then
   clean
 fi
