@@ -5,19 +5,20 @@ function install_source ()
   local cmd=$1
 
   # Pacman alias command
-  if [ "$cmd" == "pacman" ]; then
+  if ! type pacman &>/dev/null || [ "$cmd" == "pacman" ]; then
     if ! type cargo &>/dev/null; then
       echo "ERROR: Cargo must be installed before running installation script"
     fi
     
     if [[ "$OSTYPE" == "darwin"* ]]; then
       cargo install pacapt
-    elif [[ "OSTYPE" == "linux-gnu" ]]; then
+      alias pacman='pacapt'
+    else
       cargo install pacaptr
+      alias pacman='pacaptr'
     fi
-    alias pacman='sudo pacaptr'
   fi
-  
+
   # Check if user is sudoer
   local sudoer=true
   if ! sudo -v 2>/dev/null; then
@@ -36,7 +37,7 @@ function install_source ()
     echo -e "\nERROR: Need super user priviledges to install source packages"
     return 1
   fi
-  pacman -S "$cmd" -- -q -y > /dev/null 2>&1
+  sudo pacman -S "$cmd" -- -q -y > /dev/null 2>&1
 
   # Recheck if the command exists after installation
   if ! type "$cmd" &>/dev/null; then
@@ -71,9 +72,8 @@ function safe_alias ()
   # Install source package of commands if it doesn't exist
   local base=$(echo "$cmd" | awk '{print $1}')
   install_source_if_required $base 
-  install_code=$?
   
-  if [ "$install_code" -eq 1 ]; then
+  if [ "$?" -eq 1 ]; then
     echo "NOTE: Please install package for $base manually and rerun script for aliasing"
     return 1
   fi

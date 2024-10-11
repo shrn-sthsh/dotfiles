@@ -8,6 +8,17 @@ else
   return 1
 fi
 
+## Safe alias requirements
+# cargo
+export PATH=$PATH:$HOME/.cargo/bin/
+
+# pacman
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  alias pacman="pacapt"
+elif [[ "$OSTYPE" == "linux-gnu" ]]; then
+  alias pacman="pacaptr"
+fi
+
 ## Device control
 # display
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
@@ -95,16 +106,6 @@ safe_alias new-session "tmux new -t"
 safe_alias attach-session "tmux attach -t"
 safe_alias kill-session "tmux kill-session -t"
 safe_alias kill-server "tmux kill-server"
-
-# cargo
-export PATH=$PATH:$HOME/.cargo/bin/
-
-# pacman
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  alias pacman="pacapt"
-elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-  alias pacman="pacaptr"
-fi
 
 # lock screen
 if [[ "$OSTYPE" == "linux-gnu" ]]; then

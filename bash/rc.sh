@@ -25,7 +25,7 @@ success=true
 if [ -d $HOME/.bashrc.d ]; then
   for rc in $HOME/.bashrc.d/*; do
     if [ -f "$rc" ]; then
-      . "$rc"
+      source "$rc"
     fi
   done
 fi
@@ -33,12 +33,13 @@ unset rc
 
 # Import bash aliases and functions
 if [ -f "$HOME/.dotfiles/bash/alias.sh" ]; then
-  alias_code=$(source "$HOME/.dotfiles/bash/alias.sh")
-  
-  if [ -n "$alias_code" ]; then
+  source "$HOME/.dotfiles/bash/alias.sh"
+
+  if [ "$?" -ne 0 ]; then
     success=false
   fi
 fi
+
 if [ -f $HOME/.dotfiles/bash/vars.sh ]; then
   source $HOME/.dotfiles/bash/vars.sh
 fi
