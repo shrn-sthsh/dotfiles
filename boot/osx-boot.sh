@@ -1,9 +1,17 @@
 #!/bin/bash
 
-# Check if the script is run as root
-if [ "$(id -u)" != "0" ]; then
-  echo "Must be root to set boot volume"
-  exit 1
+# Check if script is being run as root
+if ! type sudo &>/dev/null; then
+  echo -n "ERROR: \"sudo\" must be installed before running boot script"
+  return 1
+fi
+local sudoer=true
+if ! sudo -v 2>/dev/null; then
+  sudoer=false
+fi 
+if [ "$sudoer" = false ]; then
+  echo -e "\nERROR: User must be on sudoer list to install packages"
+  return 1
 fi
 
 # Get the current boot volume

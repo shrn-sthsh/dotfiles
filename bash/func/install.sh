@@ -6,8 +6,13 @@ function install_source ()
 
   # Pacman alias command
   if ! type pacman &>/dev/null || [ "$cmd" == "pacman" ]; then
+    if ! type sudo &>/dev/null; then
+      echo -n "ERROR: \"sudo\" must be installed before running installation script"
+      return 1
+    fi
     if ! type cargo &>/dev/null; then
       echo "ERROR: Cargo must be installed before running installation script"
+      return 1
     fi
     
     if [[ "$OSTYPE" == "darwin"* ]]; then
