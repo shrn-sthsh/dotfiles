@@ -19,7 +19,7 @@ function vpn ()
       local keyfile=$(basename "$HOME/Projects/vpn.zip" .zip | sed 's/^//;s/.*\///')
     fi 
 
-    if [ "$3" == "-v" ] || [ "$3" == "--verbose" ]; then
+    if [[ $(tty) =~ "/dev/tty" ]] || [ "$3" == "-v" ] || [ "$3" == "--verbose" ]; then
       unzip $keypath $keyfile && \
         cat $keyfile && rm $keyfile
     elif [ "$OSTYPE" == "darwin"* ]; then
