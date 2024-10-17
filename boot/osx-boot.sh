@@ -55,9 +55,10 @@ selected_volume=${boot_volumes[$((choice-1))]}
 VOLUME_PATH="/Volumes/$selected_volume"
 
 # Use the bless command to set the boot volume
-echo -n "\nSetting boot volume to $selected_volume... "
+echo -ne "\nSetting boot volume to $selected_volume... "
 mkfifo passwordpipe
 bless --mount "$VOLUME_PATH" --setBoot < passwordpipe &
+echo "" > passwordpipe
 rm passwordpipe
 echo "done!"
 
