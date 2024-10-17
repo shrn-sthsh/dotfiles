@@ -66,6 +66,9 @@ PURPLE="\[\033[0;35m\]"
 
 function set_bash_prompt ()
 {
+  # Turn off showing environment
+  export VIRTUAL_ENV_DISABLE_PROMPT=1
+
   # prepend new line for TTY for MacBook curved bezels
   if ! pgrep -x sway > /dev/null || ! pgrep -x gnome > /dev/null; then
     export PS1="\n"

@@ -111,3 +111,13 @@ safe_alias kill-server "tmux kill-server"
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   safe_alias lockscreen "vlock"
 fi
+
+## Languages
+# Python
+safe_alias python "python3"
+if [[ "OSTYPE" == "darwin"* ]]; then
+  safe_alias py "python3"
+fi
+
+# C/C++
+install_source_if_required cmake

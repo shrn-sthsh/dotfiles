@@ -51,7 +51,7 @@ vim.api.nvim_create_autocmd(
 -- Language based indenting
 vim.api.nvim_create_autocmd(
   "FileType", {
-    pattern = "cpp",
+    pattern = {"cpp", "py"},
     callback = function()
       vim.opt.shiftwidth = 4
       vim.opt.tabstop = 4
@@ -62,11 +62,11 @@ vim.api.nvim_create_autocmd(
 
 vim.api.nvim_create_autocmd(
   "FileType", {
-    pattern = "py",
+    pattern = "sh",
     callback = function()
-      vim.opt.shiftwidth = 4
-      vim.opt.tabstop = 4
-      vim.opt.softtabstop = 4
+      vim.opt.shiftwidth = 2
+      vim.opt.tabstop = 2
+      vim.opt.softtabstop = 2
     end
   }
 )

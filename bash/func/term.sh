@@ -15,6 +15,6 @@ function parse_python_env ()
   if [ -z "$VIRTUAL_ENV" ]; then
     echo ""
   else
-    echo "{`basename \"VIRTUAL_ENV\"`} "
+    echo " {`basename \"$VIRTUAL_ENV\"`}"
   fi
 }
