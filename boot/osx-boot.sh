@@ -5,7 +5,7 @@ if ! type sudo &>/dev/null; then
   echo -n "ERROR: \"sudo\" must be installed before running boot script"
   return 1
 fi
-local sudoer=true
+sudoer=true
 if ! sudo -v 2>/dev/null; then
   sudoer=false
 fi 
