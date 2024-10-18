@@ -52,6 +52,7 @@ vim.api.nvim_create_autocmd(
 )
 
 -- File indenting
+-- Set 4-space tabs globally for all files
 vim.api.nvim_create_autocmd(
   { "BufReadPost", "BufNewFile" },
   {
@@ -59,17 +60,20 @@ vim.api.nvim_create_autocmd(
       vim.opt.shiftwidth = 4
       vim.opt.tabstop = 4
       vim.opt.softtabstop = 4
+      vim.opt.expandtab = true -- convert tabs to spaces
     end
   }
 )
 
+-- Set 2-space tabs for shell scripts (sh)
 vim.api.nvim_create_autocmd(
   "FileType", {
     pattern = "sh",
     callback = function()
-      vim.opt.shiftwidth = 2
-      vim.opt.tabstop = 2
-      vim.opt.softtabstop = 2
+      vim.bo.shiftwidth = 2
+      vim.bo.tabstop = 2
+      vim.bo.softtabstop = 2
+      vim.bo.expandtab = true -- convert tabs to spaces
     end
   }
 )

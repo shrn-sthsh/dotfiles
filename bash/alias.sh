@@ -115,9 +115,19 @@ fi
 ## Languages
 # Python
 safe_alias python "python3"
-if [[ "OSTYPE" == "darwin"* ]]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then
   safe_alias py "python3"
 fi
+function venv() 
+{
+  if [ -n "$1" ]; then
+    source "$1"/bin/activate
+  else
+    for file in $(find . -name "activate"); do 
+      source "$file"; 
+    done;
+  fi
+}
 
 # C/C++
 install_source_if_required cmake

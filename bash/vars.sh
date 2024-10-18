@@ -7,13 +7,33 @@ export EDITOR="$VISUAL"
 
 ## Directories
 # common
-export rc="$HOME/.bashrc"
-export desk="$HOME/Desktop"
-export docs="$HOME/Documents"
-export down="$HOME/Downloads"
-export musi="$HOME/Music"
-export proj="$HOME/Projects"
-export pub="$HOME/Public"
-export sch="$HOME/School"
-export sys="$HOME/System"
-export vids="$HOME/Videos"
+if [ -d "$HOME/.dotfiles" ]; then
+  export rc="$HOME/.dotfiles"
+fi
+if [ -d "$HOME/Desktop" ]; then
+  export desk="$HOME/Desktop"
+fi
+if [ -d "$HOME/Documents" ]; then
+  export docs="$HOME/Documents"
+fi
+if [ -d "$HOME/Downloads" ]; then
+  export down="$HOME/Downloads"
+fi
+if [ -d "$HOME/Music" ]; then
+  export musi="$HOME/Music"
+fi
+if [ -d "$HOME/Projects" ]; then
+  export proj="$HOME/Projects"
+fi
+if [ -d "$HOME/Public" ]; then
+  export pub="$HOME/Public"
+fi
+if [ -d "$HOME/School" ]; then
+  export sch="$HOME/School"
+fi
+if [ -d "$HOME/System" ]; then
+  export sys="$HOME/System"
+fi
+if [ -d "$HOME/Videos" ]; then
+  export vids="$HOME/Videos"
+fi
