@@ -99,7 +99,7 @@ bindsym XF86LaunchA input type:touchpad events toggle enabled disabled
   # Change normal to inverse to use left mouse button for resizing and right
   # mouse button for dragging.
   floating_modifier $mod normal
-  seat * hide_cursor 0
+  seat * hide_cursor 3000
 
   # Reload the configuration file
   bindsym $mod+Shift+c reload
@@ -220,6 +220,11 @@ bindsym XF86LaunchA input type:touchpad events toggle enabled disabled
 
   # Screenshot
   bindsym $mod+Shift+s exec $HOME/System/sway/screenshot.sh
+
+# Keyboard
+bindsym $mod+XF86MonBrightnessUp   exec brightnessctl --device='kbd_backlight' set 2%+
+bindsym $mod+XF86MonBrightnessDown exec brightnessctl --device='kbd_backlight' set 2%-
+
 
 # Screen lock
 bindsym XF86Sleep    exec bash $HOME/System/sway/lockscreen.sh $wallpaper
