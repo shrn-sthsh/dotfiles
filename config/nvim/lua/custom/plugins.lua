@@ -49,7 +49,7 @@ local plugins = {
         "ltex-ls",
       }
     }
-  }
+  },
 }
 
 return plugins
