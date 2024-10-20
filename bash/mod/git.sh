@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # ensure git is installed
-if [ -f ~/.dotfiles/bash/func/install.sh ]; then
-  source ~/.dotfiles/bash/func/install.sh
-  install_source_if_required "git"
+if [ -f ~/.dotfiles/bash/util/install.sh ]; then
+  source ~/.dotfiles/bash/util/install.sh
+  install_required_package "git"
 else
   echo "ERROR: Unable to check if git is installed"
   return 1

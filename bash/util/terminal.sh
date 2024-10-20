@@ -5,7 +5,7 @@ function clean ()
 {
   clear
   echo ""
-  fastfetch
+  fetch 
   echo ""
 }
 

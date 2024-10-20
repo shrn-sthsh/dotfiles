@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function install_source () 
+function install_command_package() 
 {
   local cmd=$1
 
@@ -54,21 +54,21 @@ function install_source ()
   return 0
 }
 
-function install_source_if_required ()
+function install_required_package()
 {
   local cmd=$1
 
   install_code=0
   if ! type "$cmd" &>/dev/null; then
     echo -n "Command '$cmd' not found; attempting to install source package... "
-    install_source $cmd
+    install_command_package $cmd
     install_code=$?
   fi
 
   return $install_code
 }
 
-function safe_alias () 
+function safe_alias() 
 {
   local name="$1"
   local cmd="$2"
@@ -76,7 +76,7 @@ function safe_alias ()
 
   # Install source package of commands if it doesn't exist
   local base=$(echo "$cmd" | awk '{print $1}')
-  install_source_if_required $base 
+  install_required_package $base 
   
   if [ "$?" -eq 1 ]; then
     echo "NOTE: Please install package for $base manually and rerun script for aliasing"
@@ -91,4 +91,41 @@ function safe_alias ()
   fi
 
   return 0
+}
+
+
+function safe_alias() 
+{
+  # Extract the alias name and command
+  local alias_name="${1%%=*}"
+  local full_command="${1#*=}"
+
+  # Extract environment variables
+  local variables=""
+  local command=""
+  while [[ "$full_command" =~ ^[A-Za-z_]+[A-Za-z0-9_]*= ]]; do
+    variable="${full_command%% *}"
+    variables="$variables $variable"
+    full_command="${full_command#* }"
+  done
+  variables="$(echo -e "${variables}" | sed -e 's/^[[:space:]]*//')"
+
+  # Remainder is command
+  command="$(echo -e "${full_command}" | sed -e 's/^[[:space:]]*//')"
+
+  # Install source package of commands if it doesn't exist
+  local base=$(echo "$command" | awk '{print $1}')
+  install_required_package $base 
+  
+  if [ "$?" -eq 1 ]; then
+    echo -e "NOTE: Please install package for $base manually and rerun script for aliasing\n"
+    return 1
+  fi
+
+  # Create the alias
+  if [ -z "$variables" ]; then
+    alias "$alias_name"="$command"
+  else
+    alias "$alias_name"="$variables $command"
+  fi
 }

@@ -31,22 +31,26 @@ if [ -d $HOME/.bashrc.d ]; then
 fi
 unset rc
 
-# Import bash aliases and functions
-if [ -f "$HOME/.dotfiles/bash/alias.sh" ]; then
-  source "$HOME/.dotfiles/bash/alias.sh"
+# Apply aliases and import utilities and modules
+if [ -f "$HOME/.dotfiles/bash/name.sh" ]; then
+  source "$HOME/.dotfiles/bash/name.sh"
 
   if [ "$?" -ne 0 ]; then
     success=false
   fi
 fi
-
-if [ -f $HOME/.dotfiles/bash/vars.sh ]; then
-  source $HOME/.dotfiles/bash/vars.sh
+if [ -f $HOME/.dotfiles/bash/env.sh ]; then
+  source $HOME/.dotfiles/bash/env.sh
 fi
-
-# Check if the $HOME/.bash/functions/ directory exists
-if [ -d "$HOME/.dotfiles/bash/func/" ]; then
-  for script in "$HOME/.dotfiles/bash/func/"*.sh; do
+if [ -d "$HOME/.dotfiles/bash/util/" ]; then
+  for script in "$HOME/.dotfiles/bash/util/"*.sh; do
+    if [ -f "$script" ]; then
+      source "$script"
+    fi
+  done
+fi
+if [ -d "$HOME/.dotfiles/bash/mod/" ]; then
+  for script in "$HOME/.dotfiles/bash/mod/"*.sh; do
     if [ -f "$script" ]; then
       source "$script"
     fi
@@ -64,7 +68,7 @@ PURPLE="\[\033[0;35m\]"
  WHITE="\[\033[1;37m\]"
  CLEAR="\[\e[0m\]"
 
-function set_bash_prompt ()
+function set_bash_prompt()
 {
   # Turn off showing environment
   export VIRTUAL_ENV_DISABLE_PROMPT=1
