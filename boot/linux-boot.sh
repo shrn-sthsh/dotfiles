@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Check on Linux
+if [[ "$OSTYPE" != "linux-gnu" ]]; then
+  echo "ERROR: script is only for Linux boot"
+  return 1
+fi
+
 # Check if script is being run as root
 if ! type sudo &>/dev/null; then
   echo -n "ERROR: \"sudo\" must be installed before running boot script"

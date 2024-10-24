@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Check on macOS
+if [[ "$OSTYPE" != "darwin"* ]]; then
+  echo "ERROR: script is only for macOS boot"
+  return 1
+fi
+
 # Check if script is being run as root
 if ! type sudo &>/dev/null; then
   echo -n "ERROR: \"sudo\" must be installed before running boot script"
@@ -66,7 +72,7 @@ stty echo
 
 # Countdown to give bless time
 echo -ne "\rSetting boot volume to $selected_volume"
-for i in {1..3}; do
+for i in {1..5}; do
   echo -n "."
   sleep 1
 done
@@ -74,5 +80,7 @@ echo -n " done!"
 
 # Reboot
 if [ "$1" == "-r" ]; then
+  echo -e "\nRebooting... "
+  sleep 2
   reboot
 fi
