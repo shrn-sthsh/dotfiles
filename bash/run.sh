@@ -100,17 +100,22 @@ else
 fi
 
 
-###################################### Start up #####################################
+############################## Start up interactive session ############################
+
+if [[ $- != *i* ]]; then
+  return 0
+fi
+
 # Set bash prompt
 set_bash_prompt
 
 # Double console font size if running in Linux TTY
-if [[ "$OSTYPE" == "linux-gnu" ]] && [[ $(tty) =~ "/dev/tty" ]]; then
-  setfont ter-u32n
-  sleep 1.5
+if [[ "$OSTYPE" == "linux-gnu" ]] && [[ $(tty) =~ "/dev/tty" ]] && [[ $- == *i* ]]; then
+setfont ter-u32n
+sleep 1.5
 fi
 
 # Write start up system information if iteractive session
-if [[ $- == *i* ]] && [ "$success" = true ]; then
-  clean
+if [ "$success" = true ]; then
+clean
 fi
