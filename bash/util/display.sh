@@ -31,7 +31,7 @@ function mode()
   if [[ "$1" == "tty" ]]; then
     for manager in "${managers[@}]}"; do
       if pgrep -x "$1" > /dev/null; then
-        if ! $manager exit 2>/dev/null; then
+        if ! $manager exit 2> /dev/null; then
           pkill -x "$manager"
         fi
       fi
@@ -47,7 +47,7 @@ function mode()
 
         # affirmitve relaunch
         if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
-          if ! $manager exit 2>/dev/null; then
+          if ! $manager exit 2> /dev/null; then
             pkill -x "$manager"
           fi
           exec "$@"
@@ -62,7 +62,7 @@ function mode()
       else   
         for other in "${managers[@}]}"; do
           if pgrep -x "$1" > /dev/null; then
-            if ! $other exit 2>/dev/null; then
+            if ! $other exit 2> /dev/null; then
               pkill -x "$other"
             fi
           fi

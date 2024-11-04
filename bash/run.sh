@@ -111,11 +111,11 @@ set_bash_prompt
 
 # Double console font size if running in Linux TTY
 if [[ "$OSTYPE" == "linux-gnu" ]] && [[ $(tty) =~ "/dev/tty" ]] && [[ $- == *i* ]]; then
-setfont ter-u32n
-sleep 1.5
+  setfont ter-u32n
+  sleep 1.5
 fi
 
 # Write start up system information if iteractive session
 if [ "$success" = true ]; then
-clean
+  clean
 fi
