@@ -5,7 +5,7 @@ M.ui = {
   -- Themes
   theme = 'falcon',
   theme_toggle = { "falcon", "oxocarbon" },
-  transparency = false,
+  transparency = true,
 
 ---@diagnostic disable-next-line: missing-fields
  changed_themes = {

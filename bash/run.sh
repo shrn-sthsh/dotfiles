@@ -109,6 +109,9 @@ fi
 # Set bash prompt
 set_bash_prompt
 
+# Set bash to be in vim mode
+set -o vi
+
 # Double console font size if running in Linux TTY
 if [[ "$OSTYPE" == "linux-gnu" ]] && [[ $(tty) =~ "/dev/tty" ]] && [[ $- == *i* ]]; then
   setfont ter-u32n

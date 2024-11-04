@@ -4,7 +4,7 @@
 killall -q waybar
 
 # Wait until the processes have been killed
-while pgrep -x waybar >/dev/null; do sleep 1; done
+while pgrep -x waybar > /dev/null; do sleep 1; done
 
 # Temporaily double the number of file descriptors 
 # allowed to be spawned by terminal
