@@ -122,7 +122,7 @@ function activate()
     done;
   fi
 }
-install_required_package conda
+install_required_package anaconda
 
 # C/C++
 install_required_package cmake

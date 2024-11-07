@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Script only for Linux Systems
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
+if ! [[ "$OSTYPE" == "linux-gnu" ]]; then
+  return 0
+fi
 
 # List of window-managers availible
 managers=( 'sway' 'gnome' )
@@ -77,5 +79,3 @@ function mode()
   
   echo "ERROR: Provided window manager is unknown"
 }
-
-fi # OSTYPE == linux-gnu

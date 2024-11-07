@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # import print utilities
-if [[ -f $HOME/.dotfiles/bash/util/print.sh ]]; then
-  source $HOME/.dotfiles/bash/util/print.sh
+if [[ -f $HOME/.dotfiles/bash/util/terminal.sh ]]; then
+  source $HOME/.dotfiles/bash/util/terminal.sh
 else
   return 1
 fi
