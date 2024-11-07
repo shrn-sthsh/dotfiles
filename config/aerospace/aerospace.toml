@@ -85,8 +85,9 @@ outer.right =      6
 alt-enter = 'exec-and-forget open -n /Applications/iTerm.app'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-alt-semicolon = 'layout tiles horizontal vertical'
-alt-comma = 'layout accordion horizontal vertical'
+alt-e = 'layout tiles horizontal vertical' # tiled
+alt-w = 'layout accordion horizontal' # tabbed 
+alt-s = 'layout accordion vertical' # stacked
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-h = 'focus left'
