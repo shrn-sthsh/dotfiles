@@ -122,7 +122,9 @@ function activate()
     done;
   fi
 }
-install_required_package anaconda
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  install_required_package anaconda3
+fi
 
 # C/C++
 install_required_package cmake

@@ -16,18 +16,22 @@ function git-with-key()
     if [ "$2" == "-v" ] || [ "$2" == "--verbose" ]; then
       unzip $HOME/Projects/git.zip gitkey && \
         cat gitkey && rm gitkey
+
     elif [[ "$OSTYPE" == "darwin"* ]]; then
       unzip $HOME/Projects/git.zip gitkey && \
         cat gitkey | pbcopy && \
         rm gitkey
+
     elif [ "$OSTYPE" == "linux-gnu" ]; then
       if [[ $(tty) =~ "/dev/tty" ]]; then
         unzip $HOME/Projects/git.zip gitkey && \
           cat gitkey && rm gitkey
+
       elif [ "$XDG_SESSION_TYPE" == "wayland" ]; then
         unzip $HOME/Projects/git.zip gitkey && \
           cat gitkey | wl-copy && \
           rm gitkey 
+
       else 
         zip $HOME/Projects/git.zip gitkey && \
           cat gitkey | xsel --clipboard && \

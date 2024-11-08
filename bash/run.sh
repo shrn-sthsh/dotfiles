@@ -18,6 +18,12 @@ if [ -d "$HOME/.bin" ]; then
   done
 fi
 
+# Bash completion
+if [[ $OSTYPE == "darwin"* ]]; then
+  export BASH_COMPLETION_COMPAT_DIR="/opt/homebrew/Cellar/bash-completion@2/2.14.0/etc/bash_completion.d/"
+  [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && source "/opt/homebrew/Cellar/bash-completion@2/2.14.0/etc/profile.d/bash_completion.sh"
+fi
+
 # Script successes variable
 success=true
 

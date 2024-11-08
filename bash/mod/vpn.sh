@@ -118,7 +118,7 @@ function vpn_connect()
     local keyfile="gtvpnkey"
 
     if ! [[ -f $keypath ]]; then
-      safe_echo "WARNING: path to vpn key doesn't exist; must enter passkey manually"
+      safe_echo -e "WARNING: path to vpn key doesn't exist; must enter passkey manually\n"
 
       openconnect --protocol=gp \
         --server=vpn.gatech.edu \

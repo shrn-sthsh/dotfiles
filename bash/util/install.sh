@@ -12,8 +12,8 @@ function install_command_package()
 {
   local cmd=$1
 
-  # check if can be loaded as module
-  if ! type module &> /dev/null; then
+  # check if target can be loaded as module
+  if type module &> /dev/null; then
     module load $cmd
 
     # Recheck if the command exists after module loading
@@ -22,7 +22,7 @@ function install_command_package()
       return 1
     fi
 
-    echo "SUCCESS"
+    safe_echo "SUCCESS"
     return 0 
   fi
 
