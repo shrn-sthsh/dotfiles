@@ -122,8 +122,8 @@ function activate()
     done;
   fi
 }
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
-  install_required_package anaconda3
+if type module &> /dev/null; then
+  load_required_module "anaconda3"
 fi
 
 # C/C++

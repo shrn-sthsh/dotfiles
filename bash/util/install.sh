@@ -8,6 +8,26 @@ else
 fi
 
 
+function load_required_module()
+{
+  if type module &> /dev/null; then
+    safe_echo -e "ERROR: system does not support modules"
+    return 1
+  fi
+
+  local mod=$1
+  module load $mod
+
+  # Recheck if the command exists after module loading
+  if ! type "$mod" &> /dev/null; then
+    safe_echo -e "FAILURE\n--> Unable find or install source module '$mod'"
+    return 1
+  fi
+
+  safe_echo "SUCCESS"
+  return 0 
+}
+
 function install_command_package() 
 {
   local cmd=$1
@@ -18,12 +38,11 @@ function install_command_package()
 
     # Recheck if the command exists after module loading
     if ! type "$cmd" &> /dev/null; then
-      safe_echo -e "FAILURE\n--> Unable find or install source package with '$cmd'"
-      return 1
+      safe_echo -e "FAILURE\n--> Unable find or install source module with '$cmd'; trying pacakge manager..."
+    else
+      safe_echo "SUCCESS"
+      return 0 
     fi
-
-    safe_echo "SUCCESS"
-    return 0 
   fi
 
   # Pacman alias command
