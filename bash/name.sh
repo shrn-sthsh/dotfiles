@@ -1,11 +1,29 @@
 #!/bin/bash
 
 # import installer
-if [ -f ~/.dotfiles/bash/util/install.sh ]; then
-  source ~/.dotfiles/bash/util/install.sh
-else
-  echo "ERROR: Unable to check if command source packages exist before aliasing"
-  return 1
+installer_source_file="$HOME/.dotfiles/bash/util/install.sh"
+if [[ ! " ${BASH_SOURCE[@]} " =~ " $installer_source_file " ]]; then
+
+  if [ -f "$installer_source_file" ]; then
+    source "$installer_source_file"
+
+  else
+    echo "ERROR: Unable to check if command source packages exist before aliasing"
+    return 1
+  fi
+fi
+
+# import print utilities
+terminal_source_file="$HOME/.dotfiles/bash/util/terminal.sh"
+if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
+
+  if [ -f $terminal_source_file ]; then
+    source $terminal_source_file
+
+  else
+    echo "ERROR: VPN commands require 'safe_echo' command from terminal utility"
+    return 1
+  fi
 fi
 
 ## Safe alias requirements
@@ -109,22 +127,12 @@ fi
 ## Languages
 # Python
 safe_alias python="python3"
-if [[ "$OSTYPE" == "darwin"* ]]; then
+if ! type py &> /dev/null; then
   safe_alias py="python3"
 fi
-function activate() 
-{
-  if [ -n "$1" ]; then
-    source "$1"/bin/activate
-  else
-    for file in $(find . -name "activate"); do 
-      source "$file"; 
-    done;
-  fi
-}
 if type module &> /dev/null; then
-  load_required_module "anaconda3"
+  load_package_module "anaconda3"
 fi
 
 # C/C++
-install_required_package cmake
+install_required_package "cmake"

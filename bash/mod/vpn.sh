@@ -1,10 +1,16 @@
 #!/bin/bash
 
 # import print utilities
-if [[ -f $HOME/.dotfiles/bash/util/terminal.sh ]]; then
-  source $HOME/.dotfiles/bash/util/terminal.sh
-else
-  return 1
+terminal_source_file="$HOME/.dotfiles/bash/util/terminal.sh"
+if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
+
+  if [ -f $terminal_source_file ] ; then
+    source $terminal_source_file
+
+  else
+    echo "ERROR: VPN commands require 'safe_echo' command from terminal utility"
+    return 1
+  fi
 fi
 
 # vpn service
@@ -40,7 +46,7 @@ function vpn()
   return 0
 }
 
-function vpn_status()
+function vpn-status()
 {
   local pids=$(pgrep openconnect)
     if [ -n "$pids" ]; then
@@ -52,9 +58,9 @@ function vpn_status()
   return 0
 }
 
-function vpn_key()
+function vpn-key()
 {
-  if [[ -z "$1" ]]; then
+  if [ -z "$1" ]; then
     safe_echo "ERROR: Must provide path to key or known vpn hostkey"
     return 1
   elif [ "$1" == "gt" ]; then
@@ -65,7 +71,7 @@ function vpn_key()
     local keyfile=$(basename "$HOME/Projects/vpn.zip" .zip | sed 's/^//;s/.*\///')
   fi 
 
-  if ! [[ -f $keypath ]]; then
+  if ! [ -f $keypath ]; then
     safe_echo "ERROR: path to key specifed doesn't exist"
     return 1
   fi
@@ -99,7 +105,7 @@ function vpn_key()
   return 0
 }
 
-function vpn_connect()
+function vpn-connect()
 {
   local pids=$(pgrep openconnect)
 
@@ -117,7 +123,7 @@ function vpn_connect()
     local keypath="$HOME/Projects/gtvpn.zip"
     local keyfile="gtvpnkey"
 
-    if ! [[ -f $keypath ]]; then
+    if ! [ -f $keypath ]; then
       safe_echo -e "WARNING: path to vpn key doesn't exist; must enter passkey manually\n"
 
       openconnect --protocol=gp \
@@ -141,7 +147,7 @@ function vpn_connect()
   return 0
 }
 
-function vpn_disconnect()
+function vpn-disconnect()
 {
   local pids=$(pgrep openconnect)
 

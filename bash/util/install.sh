@@ -1,48 +1,25 @@
 #!/bin/bash
 
 # import print utilities
-if [[ -f $HOME/.dotfiles/bash/util/terminal.sh ]]; then
-  source $HOME/.dotfiles/bash/util/terminal.sh
-else
-  return 1
+terminal_source_file="$HOME/.dotfiles/bash/util/terminal.sh"
+if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
+
+  if [ -f $terminal_source_file ] ; then
+    source $terminal_source_file
+
+  else
+    echo "ERROR: VPN commands require 'safe_echo' command from terminal utility"
+    return 1
+  fi
 fi
 
-
-function load_required_module()
-{
-  if type module &> /dev/null; then
-    safe_echo -e "ERROR: system does not support modules"
-    return 1
-  fi
-
-  local mod=$1
-  module load $mod
-
-  # Recheck if the command exists after module loading
-  if ! type "$mod" &> /dev/null; then
-    safe_echo -e "FAILURE\n--> Unable find or install source module '$mod'"
-    return 1
-  fi
-
-  safe_echo "SUCCESS"
-  return 0 
-}
 
 function install_command_package() 
 {
   local cmd=$1
-
-  # check if target can be loaded as module
-  if type module &> /dev/null; then
-    module load $cmd
-
-    # Recheck if the command exists after module loading
-    if ! type "$cmd" &> /dev/null; then
-      safe_echo -e "FAILURE\n--> Unable find or install source module with '$cmd'; trying pacakge manager..."
-    else
-      safe_echo "SUCCESS"
-      return 0 
-    fi
+  if [ -z "$cmd" ]; then
+      safe_echo -n "ERROR: no command provided"
+      return 1
   fi
 
   # Pacman alias command
@@ -98,15 +75,56 @@ function install_command_package()
 function install_required_package()
 {
   local cmd=$1
+  if [ -z "$cmd" ]; then
+      safe_echo -n "ERROR: no command provided"
+      return 1
+  fi
 
   install_code=0
   if ! type "$cmd" &> /dev/null; then
     safe_echo -n "Command '$cmd' not found; attempting to install source package... "
-    install_command_package $cmd
+    install_command_package "$cmd"
     install_code=$?
   fi
 
   return $install_code
+}
+
+function load_package_module() 
+{
+  local mod=$1
+  if [ -z "$mod" ]; then
+      safe_echo -n "ERROR: no module provided"
+      return 1
+  fi
+
+  safe_echo -n "Loading module '$mod'... "
+
+  # check if can be loaded as module
+  if type module &> /dev/null; then
+
+    # check if module is already loaded
+    if module list 2>&1 | grep "$mod" &> /dev/null; then
+      safe_echo -e "\nSUCCESS: module already loaded"
+      return 0
+    fi
+
+    # load module
+    module load "$mod" &> /dev/null
+
+    # check now if module is loaded
+    if ! module list 2>&1 | grep "$mod" &> /dev/null; then
+      safe_echo -e "\nFAILURE\n--> Unable find or load package module '$mod'"
+      return 1
+    fi
+
+    safe_echo "SUCCESS"
+    return 0
+
+  else
+    safe_echo -e "\nERROR: system does not support modules"
+    return 1
+  fi
 }
 
 function safe_alias() 
@@ -130,9 +148,9 @@ function safe_alias()
 
   # Install source package of commands if it doesn't exist
   local base=$(safe_echo "$command" | awk '{print $1}')
-  install_required_package $base 
+  install_required_package "$base" 
   
-  if [ "$?" -eq 1 ]; then
+  if [ "$?" -ne 0 ]; then
     safe_echo -e "NOTE: Please install package for $base manually and rerun script for aliasing\n"
     return 1
   fi
@@ -143,4 +161,6 @@ function safe_alias()
   else
     alias "$alias_name"="$variables $command"
   fi
+
+  return 0
 }

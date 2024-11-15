@@ -24,7 +24,7 @@ function gnome()
 # Switch between window-managers and TTY
 function mode()
 {
-  if [[ -z "$1" ]]; then
+  if [ -z "$1" ]; then
     echo "ERROR: Must provide a window manager to switch to"
     return 1
   fi
