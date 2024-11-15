@@ -22,6 +22,7 @@ function clean()
 
 ## Prompt
 # setter
+CUSTOM_PROMPT_SET=false
 function set_bash_prompt()
 {
   # check if prompt is already set
@@ -87,7 +88,7 @@ function set_bash_prompt()
 
   unset PS1
   export PS1="$prompt"
-  export CUSTOM_PROMPT_SET=true
+  CUSTOM_PROMPT_SET=true
 }
 
 # New line after commands but top command will not be affected through clear for PTS

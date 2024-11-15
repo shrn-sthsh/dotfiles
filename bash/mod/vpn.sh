@@ -24,19 +24,19 @@ function vpn()
 
   # status
   if [ $1 == "status" ] || [ $1 == "stat" ]; then
-    vpn_status
+    vpn-status
 
   # key
   elif [ "$1" == "key" ]; then
-    vpn_key $2 $3
+    vpn-key $2 $3
 
   # connect
   elif [ $1 == "connect" ] || [ $1 == "conn" ]; then
-    vpn_connect ${@:2}
+    vpn-connect ${@:2}
 
   # disconnect
   elif [ $1 == "disconnect" ] || [ $1 == "disc" ]; then
-    vpn_disconnect 
+    vpn-disconnect 
 
   # unknown command
   else
