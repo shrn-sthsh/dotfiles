@@ -58,7 +58,7 @@ function install_command_package()
 
   # Attempt to install the command 
   if ! sudo -v 2> /dev/null; then
-    safe_echo -e "\nERROR: Must be a sudoer to install source packages"
+    safe_echo -e "ERROR: Must be a sudoer to install source packages"
     safe_echo -e "NOTE: Adding binaries to ~/.bin is an alternative if not a sudoer"
 
     if [ "$top" = true ]; then safe_new_line; fi
@@ -75,7 +75,7 @@ function install_command_package()
     return 1
   fi
 
-  safe_echo "SUCCESS"
+  safe_echo "SUCCESS: Source package installed"
   if [ "$top" = true ]; then safe_new_line; fi
   return 0
 }
@@ -100,7 +100,7 @@ function install_required_package()
 
   install_code=0
   if ! type "$cmd" &> /dev/null; then
-    safe_echo -n "Command '$cmd' not found; attempting to install source package... "
+    safe_echo "Command '$cmd' not found; attempting to install source package... "
 
     if [ "$top" = true ]; then
       install_command_package "$cmd"
@@ -123,14 +123,14 @@ function load_package_module()
       return 1
   fi
 
-  safe_echo -n "Loading module '$mod'... "
+  safe_echo "Loading module '$mod'... "
 
   # check if can be loaded as module
   if type module &> /dev/null; then
 
     # check if module is already loaded
     if module list 2>&1 | grep "$mod" &> /dev/null; then
-      safe_echo -e "SUCCESS\nNOTE: Module was already loaded"
+      safe_echo -e "SUCCESS: Module was already loaded"
       return 0
     fi
 
@@ -139,15 +139,15 @@ function load_package_module()
 
     # check now if module is loaded
     if ! module list 2>&1 | grep "$mod" &> /dev/null; then
-      safe_echo -e "\nFAILURE: Unable find or load package module '$mod'"
+      safe_echo -e "FAILURE: Unable find or load package module '$mod'"
       return 1
     fi
 
-    safe_echo "SUCCESS"
+    safe_echo "SUCCESS: Module loaded"
     return 0
 
   else
-    safe_echo -e "\nERROR: System does not support modules"
+    safe_echo -e "ERROR: System does not support modules"
     return 1
   fi
 }
