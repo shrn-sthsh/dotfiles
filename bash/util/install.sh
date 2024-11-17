@@ -16,9 +16,19 @@ fi
 
 function install_command_package() 
 {
-  local cmd=$1
+  if [[ "$1" == "-n" ]]; then
+    local cmd=$2
+    local sub=true
+
+  else
+    local cmd=$1
+    if [[ "$2" == "-n" ]]; then local sub=true 
+    else local sub=false; fi
+  fi
+
   if [ -z "$cmd" ]; then
-      safe_echo -n "ERROR: no command provided"
+      safe_echo -n "ERROR: No command provided"
+      if [ "$sub" = true ]; then safe_echo ""; fi
       return 1
   fi
 
@@ -26,10 +36,12 @@ function install_command_package()
   if ! type pacman &> /dev/null || [ "$cmd" == "pacman" ]; then
     if ! type sudo &> /dev/null; then
       safe_echo -n "ERROR: \"sudo\" must be installed before running installation script"
+      if [ "$sub" = true ]; then safe_echo ""; fi
       return 1
     fi
     if ! type cargo &> /dev/null; then
       safe_echo "ERROR: Cargo must be installed before running installation script"
+      if [ "$sub" = true ]; then safe_echo ""; fi
       return 1
     fi
     
@@ -42,49 +54,60 @@ function install_command_package()
     fi
   fi
 
-  # Check if user is sudoer
-  local sudoer=true
+  # Attempt to install the command 
   if ! sudo -v 2> /dev/null; then
-    sudoer=false
-  fi 
-  if [ "$sudoer" = false ]; then
-    safe_echo -e "\nERROR: User must be on sudoer list to install packages"
-    return 1
-  fi
+    safe_echo -e "\nERROR: Must be a sudoer to install source packages"
+    safe_echo -e "NOTE: Adding binaries to ~/.bin is an alternative if not a sudoer"
 
-  # Attempt to install the command
-  if ! sudo -n -v 2> /dev/null; then
-    safe_echo "" && sudo -v && safe_echo ""
-  fi
-  if ! sudo -n -v 2> /dev/null; then
-    safe_echo -e "\nERROR: Need super user priviledges to install source packages"
+    if [ "$sub" = true ]; then safe_echo ""; fi
     return 1
   fi
   sudo pacman -S "$cmd" -- -q -y > /dev/null 2>&1
 
   # Recheck if the command exists after installation
   if ! type "$cmd" &> /dev/null; then
-    safe_echo -e "FAILURE\n--> Unable find or install source package with '$cmd'"
+    safe_echo -e "FAILURE: Unable find or install source package with '$cmd'"
+    safe_echo -e "NOTE: Try updating package manager and if that fails consider a package binary for ~/.bin"
+
+    if [ "$sub" = true ]; then safe_echo ""; fi
     return 1
   fi
 
   safe_echo "SUCCESS"
+  if [ "$sub" = true ]; then safe_echo ""; fi
   return 0
 }
 
 function install_required_package()
 {
-  local cmd=$1
+  if [[ "$1" == "-n" ]]; then
+    local cmd=$2
+    local sub=true
+
+  else
+    local cmd=$1
+    if [[ "$2" == "-n" ]]; then local sub=true
+    else local sub=false; fi
+  fi
+
   if [ -z "$cmd" ]; then
-      safe_echo -n "ERROR: no command provided"
+      safe_echo -n "ERROR: No command provided"
+      if [ "$sub" = true ]; then safe_echo ""; fi
       return 1
   fi
 
   install_code=0
   if ! type "$cmd" &> /dev/null; then
     safe_echo -n "Command '$cmd' not found; attempting to install source package... "
-    install_command_package "$cmd"
-    install_code=$?
+
+    if [ "$sub" = true ]; then
+      install_command_package -n "$cmd"
+      install_code=$?
+
+    else
+      install_command_package "$cmd"
+      install_code=$?
+    fi
   fi
 
   return $install_code
@@ -94,7 +117,7 @@ function load_package_module()
 {
   local mod=$1
   if [ -z "$mod" ]; then
-      safe_echo -n "ERROR: no module provided"
+      safe_echo -n "ERROR: No module provided"
       return 1
   fi
 
@@ -105,7 +128,7 @@ function load_package_module()
 
     # check if module is already loaded
     if module list 2>&1 | grep "$mod" &> /dev/null; then
-      safe_echo -e "\nSUCCESS: module already loaded"
+      safe_echo -e "SUCCESS\nNOTE: Module was already loaded"
       return 0
     fi
 
@@ -114,7 +137,7 @@ function load_package_module()
 
     # check now if module is loaded
     if ! module list 2>&1 | grep "$mod" &> /dev/null; then
-      safe_echo -e "\nFAILURE\n--> Unable find or load package module '$mod'"
+      safe_echo -e "\nFAILURE: Unable find or load package module '$mod'"
       return 1
     fi
 
@@ -122,7 +145,7 @@ function load_package_module()
     return 0
 
   else
-    safe_echo -e "\nERROR: system does not support modules"
+    safe_echo -e "\nERROR: System does not support modules"
     return 1
   fi
 }

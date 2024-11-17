@@ -38,19 +38,22 @@ elif [[ "$OSTYPE" == "linux-gnu" ]]; then
 fi
 
 ## Device control
-# display
+# display & keyboard
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-  safe_alias dsp="brightnessctl set" || status=1
+  last=0
+
+  safe_alias dsp="brightnessctl set" || last=0
+  if [ "$last" -eq 0 ]; then
+    alias kbd="brightnessctl --device='kbd_backlight' set" || status=1
+
+  else
+    status=1
+  fi
 fi
 
 # audio
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   safe_alias vol="wpctl set-volume -l 1.0 @DEFAULT_SINK@" || status=1
-fi
-
-# keyboard
-if [[ "$OSTYPE" == "linux-gnu" ]]; then 
-  safe_alias kbd="brightnessctl --device='kbd_backlight' set" || status=1
 fi
 
 # boot volume
@@ -69,21 +72,43 @@ safe_alias fetch="fastfetch" || status=1
 
 # files
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  safe_alias ls="eza"          || status=1
-  safe_alias ll="eza -lh"      || status=1
-  safe_alias tree="eza --tree" || status=1
+  last=0
+
+  safe_alias ls="eza" || last=1
+  if [ "$last" -eq 0 ]; then
+    alias ll="eza -lh"
+    alias tree="eza --tree"
+
+  else
+    status=1
+  fi
+
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-  safe_alias ls="exa"          || status=1
-  safe_alias ll="exa -lh"      || status=1
-  safe_alias tree="exa --tree" || status=1
+  last=0
+
+  safe_alias ls="exa" || last=1
+  if [ "$?" -eq 0 ]; then
+    alias ll="exa -lh"
+    alias tree="exa --tree"
+
+  else
+    status=1
+  fi
 fi
 
 # file content
 safe_alias cat="bat --theme=ansi" || status=1
 
 # changing directories
-eval "$(zoxide init bash)"
-safe_alias cd="z" || status=1
+last=0
+install_required_package -n "zoxide" || last=1
+if [ "$last" -eq 0 ]; then
+  eval "$(zoxide init bash)"
+  alias cd="z"
+
+else
+  status=1
+fi
 
 # file browsers
 safe_alias fb="ranger" || status=1
@@ -111,16 +136,28 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 fi
 
 # neovim
-safe_alias vim="nvim"         || status=1
-safe_alias vimdiff="nvim -d"  || status=1
-safe_alias nvimdiff="nvim -d" || status=1
+last=0
+safe_alias vim="nvim" || last=1
+if [ "$last" -eq 0 ]; then
+  alias vimdiff="nvim -d"
+  alias nvimdiff="nvim -d"
+
+else
+  status=1
+fi
 
 # tmux
-safe_alias list-sessions="tmux list-sessions"  || status=1
-safe_alias new-session="tmux new -t"           || status=1
-safe_alias attach-session="tmux attach -t"     || status=1
-safe_alias kill-session="tmux kill-session -t" || status=1
-safe_alias kill-server="tmux kill-server"      || status=1
+last=0
+safe_alias list-sessions="tmux list-sessions"  || last=1
+if [ "$last" -eq 0 ]; then
+  alias new-session="tmux new -t"
+  alias attach-session="tmux attach -t"
+  alias kill-session="tmux kill-session -t"
+  alias kill-server="tmux kill-server"
+
+else
+  status=1
+fi
 
 # lock screen
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
@@ -138,7 +175,7 @@ if type module &> /dev/null; then
 fi
 
 # C/C++
-install_required_package "cmake" || status=1
+install_required_package -n "cmake" || status=1
 
 
 # return status of aliases
