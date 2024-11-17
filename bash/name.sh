@@ -101,7 +101,7 @@ safe_alias cat="bat --theme=ansi" || status=1
 
 # changing directories
 last=0
-install_required_package -n "zoxide" || last=1
+install_required_package "zoxide" || last=1
 if [ "$last" -eq 0 ]; then
   eval "$(zoxide init bash)"
   alias cd="z"
@@ -175,7 +175,7 @@ if type module &> /dev/null; then
 fi
 
 # C/C++
-install_required_package -n "cmake" || status=1
+install_required_package "cmake" || status=1
 
 
 # return status of aliases

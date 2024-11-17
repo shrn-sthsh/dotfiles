@@ -11,6 +11,17 @@ function safe_echo()
   return 0
 }
 
+# new line routines based on echo
+function new_line()
+{
+    echo ""
+}
+function safe_new_line()
+{
+   safe_echo "" 
+}
+
+
 # status + clear
 function clean()
 {
