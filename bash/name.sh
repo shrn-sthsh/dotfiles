@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # import installer
 installer_source_file="$HOME/.dotfiles/bash/util/install.sh"
 if [[ ! " ${BASH_SOURCE[@]} " =~ " $installer_source_file " ]]; then
@@ -8,23 +9,168 @@ if [[ ! " ${BASH_SOURCE[@]} " =~ " $installer_source_file " ]]; then
     source "$installer_source_file"
 
   else
-    echo "ERROR: Unable to check if command source packages exist before aliasing"
+    if [[ $- != *i* ]]; then
+      echo "ERROR: Aliasing requires installer"
+    fi 
     return 1
   fi
 fi
 
-# import print utilities
-terminal_source_file="$HOME/.dotfiles/bash/util/terminal.sh"
-if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
+# Run aliasing
+function set_aliasing()
+{
+  # check for cache folder
+  cache="$HOME/.dotfiles/bash/.cache"
+  if ! [ -d "$cache" ]; then
+    mkdir $cache
+  fi 
 
-  if [ -f $terminal_source_file ]; then
-    source $terminal_source_file
+  # check for alias cache
+  alias_cache="$cache/alias.cache"
+  if [[ -f "$alias_cache" ]]; then
+    touch $alias_cache
+  fi
 
+  # set aliasing on and run
+  echo "Y" > $alias_cache 
+  source "$HOME/.bashrc"
+}
+
+# Run unaliasing
+function unset_aliasing()
+{
+  # check for cache folder
+  cache="$HOME/.dotfiles/bash/.cache"
+  if ! [ -d "$cache" ]; then
+    mkdir $cache
+  fi 
+
+  # check for alias cache
+  alias_cache="$cache/alias.cache"
+  if [[ -f "$alias_cache" ]]; then
+    touch $alias_cache
+  fi
+
+  # set aliasing on and run
+  echo "N" > $alias_cache 
+  unalias -a
+  source "$HOME/.bashrc"
+}
+
+function status_aliasing()
+{
+  # can only be run in interactive sessions
+  if [[ $- != *i* ]]; then
+    return 1
+  fi
+
+  # check for cache folder
+  cache="$HOME/.dotfiles/bash/.cache"
+  if ! [ -d "$cache" ]; then
+    mkdir $cache
+  fi 
+
+  # check for alias cache
+  alias_cache="$cache/alias.cache"
+  if ! [[ -f "$alias_cache" ]]; then
+    echo "ERROR: No alias cache" 
+    return 0
+  fi
+
+  # read alias cache
+  read -r alias_state < $alias_cache
+  if [[ "$alias_state" == "Y" ]]; then
+    echo "STATUS: Aliasing set ON"
   else
-    echo "ERROR: VPN commands require 'safe_echo' command from terminal utility"
-    return 1
+    echo "STATUS: Aliasing set OFF"
+  fi 
+}
+
+# Check aliasing to start interactive
+if [[ $- == *i* ]]; then
+
+  # check for cache folder
+  cache="$HOME/.dotfiles/bash/.cache"
+  if ! [ -d "$cache" ]; then
+    mkdir $cache
   fi
+
+  # read alias cache
+  alias_cache="$cache/alias.cache"
+  if [ -f "$alias_cache" ]; then
+    read -r alias_state < $alias_cache
+  else
+    alias_state="" 
+  fi
+  
+  # option is never been set
+  if [ -z "$alias_state" ]; then
+    # greeting
+    echo ""
+    echo "       /\$\$   /\$\$ /\$\$\$\$\$\$ /\$\$"
+    echo "      | \$\$  | \$\$|_  \$\$_/| \$\$"
+    echo "      | \$\$  | \$\$  | \$\$  | \$\$"
+    echo "      | \$\$\$\$\$\$\$\$  | \$\$  | \$\$"
+    echo "      | \$\$__  \$\$  | \$\$  |__/"
+    echo "      | \$\$  | \$\$  | \$\$      "
+    echo "      | \$\$  | \$\$ /\$\$\$\$\$\$ /\$\$"
+    echo "      |__/  |__/|______/|__/"
+    echo ""
+    echo ""
+
+    # find out whether to alias or not
+    echo "You're seeing this message becuase aliasing has not been set for this machine."
+    echo "Do you want turn on the suggested aliasing?"
+    echo -e "\nNote, this may prompt 'sudo' to install if aliasing requires package"
+
+    # set state 
+    read -t 10 -p "Answer within 10 seconds [y/N]: " input
+    if [[ -f "$alias_cache" ]]; then
+      touch $alias_cache
+    fi
+
+    # save and run aliasing
+    echo "$alias_cache"
+    if [[ "$input" == "y" || "$input" == "Y" ]]; then 
+      echo "Y" > $alias_cache
+
+      echo -e "\nSet aliasing ON for this machine."
+      echo "Note, you can always change the aliasing option by running 'set_aliasing' or unset_aliasing'."
+
+      echo -n "Aliasing in "
+      for second in {3..1}; do
+        echo -n "$second.."
+        sleep 1
+      done
+      echo "0" 
+      
+    # save and do not alias
+    else
+      echo "N" > $alias_cache
+
+      echo -e "\nSet aliasing OFF for this machine."
+      echo "Note, you can always change the aliasing option by running 'set_aliasing' or 'unset_aliasing'."
+      
+      unset $alias_cache
+      sleep 3
+
+      return 0
+    fi
+    
+  # option set to do not alias
+  elif [[ "$alias_state" == "N" ]]; then
+    unset $alias_cache
+    return 0
+  fi
+
+  unset $alias_cache
+
+# Non iteractive sessions can not alias
+else
+    unset $alias_cache
+  return 0
 fi
+
 
 ## Safe alias requirements
 # cargo

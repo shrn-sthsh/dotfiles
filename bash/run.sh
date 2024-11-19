@@ -91,6 +91,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]] && [[ $(tty) =~ "/dev/tty" ]] && [[ $- == *i* 
 fi
 
 # Write start up system information if iteractive session
-if [[ "$aliasing_success" == true ]]; then
+if [[ "$aliasing_success" == true ]] && type clean &> /dev/null; then
   clean
 fi

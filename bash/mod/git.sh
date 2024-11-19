@@ -1,15 +1,18 @@
 #!/bin/bash
 
 # ensure git is installed
-git_source_file="$HOME/.dotfiles/bash/util/install.sh"
-if [[ ! " ${BASH_SOURCE[@]} " =~ " $git_source_file " ]]; then
+installer_source_file="$HOME/.dotfiles/bash/util/install.sh"
+if [[ ! " ${BASH_SOURCE[@]} " =~ " $installer_source_file " ]]; then
 
-  if [ -f $git_source_file ]; then
-    source $git_source_file    
+  if [ -f $installer_source_file ]; then
+    source $installer_source_file    
     install_required_package "git"
 
   else
-    echo "ERROR: Unable to check if git is installed"
+    if [[ $- != *i* ]]; then
+      echo "ERROR: Unable to check if git is installed"
+    fi
+
     return 1
   fi
 fi

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 terminal_source_file="$HOME/.dotfiles/bash/util/terminal.sh"
 if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
 
@@ -7,7 +8,10 @@ if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
     source $terminal_source_file
 
   else
-    echo "ERROR: VPN commands require 'safe_echo' command from terminal utility"
+    if [[ $- != *i* ]]; then
+      echo "ERROR: python and conda environment commands require 'safe_echo' command from terminal utility"
+    fi
+
     return 1
   fi
 fi

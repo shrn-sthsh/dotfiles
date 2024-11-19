@@ -26,9 +26,12 @@ function safe_new_line()
 function clean()
 {
   clear
-  echo ""
-  fetch 
-  echo ""
+
+  if type fetch &> /dev/null; then
+    echo ""
+    fetch 
+    echo ""
+  fi
 }
 
 ## Prompt
