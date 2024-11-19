@@ -16,6 +16,8 @@ if [[ ! " ${BASH_SOURCE[@]} " =~ " $installer_source_file " ]]; then
   fi
 fi
 
+
+## Aliasing control
 # Run aliasing
 function set_aliasing()
 {
@@ -86,7 +88,7 @@ function status_aliasing()
   fi 
 }
 
-# Check aliasing to start interactive
+# New or reset machine interaction
 if [[ $- == *i* ]]; then
 
   # check for cache folder
@@ -211,6 +213,7 @@ fi
 
 # status of any aliases failing
 status=0
+
 
 ## Commands
 # status

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # import print utilities
 terminal_source_file="$HOME/.dotfiles/bash/util/terminal.sh"
 if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
@@ -14,6 +15,8 @@ if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
 fi
 
 
+## Package and Module commands
+# install package which provides a command
 function install_command_package() 
 {
   if [[ "$1" == "-n" ]]; then
@@ -80,6 +83,7 @@ function install_command_package()
   return 0
 }
 
+# install required package for a command
 function install_required_package()
 {
   if [[ "$1" == "-n" ]]; then
@@ -115,6 +119,7 @@ function install_required_package()
   return $install_code
 }
 
+# load a module which provides a package
 function load_package_module() 
 {
   local mod=$1
@@ -152,6 +157,7 @@ function load_package_module()
   fi
 }
 
+# alias a command and install required command if necessary
 function safe_alias() 
 {
   # Extract the alias name and command

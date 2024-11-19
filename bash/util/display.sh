@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Script only for Linux Systems
 if ! [[ "$OSTYPE" == "linux-gnu" ]]; then
   return 0

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 
+# import print utilities
 terminal_source_file="$HOME/.dotfiles/bash/util/terminal.sh"
 if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
 

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+# Hugging Face master API
 function hf()
 {
   if [ "$1" == "key" ]; then
@@ -30,6 +32,15 @@ function hf()
     fi
 
   else
-    echo "ERROR: Unknown subcommand"
+    if type huggingface-cli &> /dev/null; then
+      command huggingface-cli "$@"
+
+    elif [[ $- != *i* ]]; then
+      echo "ERROR: Hugging Face CLI is not installed"
+      return 1
+
+    else
+      return 1
+    fi
   fi
 }
