@@ -190,7 +190,7 @@ fi
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   last=0
 
-  safe_alias dsp="brightnessctl set" || last=0
+  safe_alias dsp="brightnessctl set" || last=1
   if [ "$last" -eq 0 ]; then
     alias kbd="brightnessctl --device='kbd_backlight' set" || status=1
 
@@ -236,7 +236,7 @@ elif [[ "$OSTYPE" == "linux-gnu" ]]; then
   last=0
 
   safe_alias ls="exa" || last=1
-  if [ "$?" -eq 0 ]; then
+  if [ "$last" -eq 0 ]; then
     alias ll="exa -lh"
     alias tree="exa --tree"
 
