@@ -153,7 +153,7 @@ if [[ $- == *i* ]]; then
       echo -e "\nSet aliasing OFF for this machine."
       echo "Note, you can always change the aliasing option by running 'set_aliasing' or 'unset_aliasing'."
       
-      unset $alias_cache
+      unset alias_cache
       sleep 3
 
       return 0
@@ -161,15 +161,15 @@ if [[ $- == *i* ]]; then
     
   # option set to do not alias
   elif [[ "$alias_state" == "N" ]]; then
-    unset $alias_cache
+    unset alias_cache
     return 0
   fi
 
-  unset $alias_cache
+  unset alias_cache
 
 # Non iteractive sessions can not alias
 else
-    unset $alias_cache
+    unset alias_cache
   return 0
 fi
 

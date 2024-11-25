@@ -22,8 +22,8 @@ if [ -d "$HOME/.bin" ]; then
 fi
 
 # Bash completion
-if [[ $OSTYPE == "darwin"* ]] && [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]]; then
-  source "/opt/homebrew/etc/profile.d/bash_completion.sh"
+if [[ $OSTYPE == "darwin"* ]] && [[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]]; then
+  source "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 fi
 
 
