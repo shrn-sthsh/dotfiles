@@ -70,7 +70,7 @@ include /etc/sway/config.d/*
 
   # Application launcher
   set $menu wofi --show "run,drun,dmenu" \
-    --prompt "search programs" \
+    --prompt ">>>" \
     --width 35% \
     --height 35% \
     | xargs swaymsg exec --
@@ -227,7 +227,7 @@ bindsym $mod+XF86MonBrightnessDown exec brightnessctl --device='kbd_backlight' s
 
 
 # Screen lock
-bindsym XF86Sleep    exec bash $HOME/System/sway/lockscreen.sh $wallpaper
+bindsym XF86Sleep    exec echo ""
 bindsym XF86PowerOff exec bash $HOME/System/sway/lockscreen.sh $wallpaper
 
 # Audio 

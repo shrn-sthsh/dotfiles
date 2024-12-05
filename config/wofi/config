@@ -1,0 +1,5 @@
+mode="run,drun,dmenu"
+prompt="search programs"
+width=35%
+height=35%
+allow_images=true
