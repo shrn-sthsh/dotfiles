@@ -176,8 +176,14 @@ function safe_alias()
   # Remainder is command
   local cmd="$(safe_echo -e "${full_cmd}" | sed -e 's/^[[:space:]]*//')"
 
+  # Extract base command ignoring sudo
+  if [[ "$cmd" =~ ^sudo[[:space:]]+ ]]; then
+    local base=$(safe_echo "$cmd" | awk '{for (i=2; i<=NF; i++) {print $i; exit}}')
+  else
+    local base=$(safe_echo "$cmd" | awk '{print $1}')
+  fi
+
   # Install source package of commands if it doesn't exist
-  local base=$(safe_echo "$cmd" | awk '{print $1}')
   install_required_package -n "$base" 
   
   if [ "$?" -ne 0 ]; then

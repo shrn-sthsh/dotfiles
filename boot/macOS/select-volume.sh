@@ -31,7 +31,7 @@ while IFS= read -r volume; do
   # Check if the volume name does not contain "Data"
   if [[ ! $volume =~ Data ]]; then
     boot_volumes+=("$volume")
-fi
+  fi
 done < <(ls /Volumes)
 
 # Display the volumes
@@ -48,7 +48,7 @@ for i in "${!boot_volumes[@]}"; do
 done
 
 # User selection
-read -p "Choose volume for next boot: " choice
+read -p "==> " choice
 if ! [[ "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -gt "${#boot_volumes[@]}" ]; then
   echo "Invalid selection"
   exit 1
@@ -57,8 +57,6 @@ selected_volume=${boot_volumes[$((choice-1))]}
 VOLUME_PATH="/Volumes/$selected_volume"
 
 # Set the boot volume with bless
-set_message="\nSetting boot volume to $selected_volume"
-echo -ne "$set_message"
 mkfifo passwordpipe
 bless --mount "$VOLUME_PATH" --setBoot < passwordpipe &
 echo "" > passwordpipe
@@ -70,17 +68,5 @@ printf "\r%$(( $(whoami | wc -c) + 14 + ${#set_message}))s"
 stty sane
 stty echo
 
-# Countdown to give bless time
-echo -ne "\rSetting boot volume to $selected_volume"
-for i in {1..5}; do
-  echo -n "."
-  sleep 1
-done
-echo -n " done!"
-
-# Reboot
-if [ "$1" == "-r" ]; then
-  echo -e "\nRebooting... "
-  sleep 2
-  reboot
-fi
+# Go back up one to fix extra line
+printf "\033[F"

@@ -206,9 +206,9 @@ fi
 
 # boot volume
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  safe_alias boot="sudo bash $HOME/.dotfiles/boot/osx-boot.sh"   || status=1
+  safe_alias boot="sudo bash $HOME/.dotfiles/boot/macOS/osx-boot.sh"   || status=1
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-  safe_alias boot="sudo bash $HOME/.dotfiles/boot/linux-boot.sh" || status=1
+  safe_alias boot="sudo bash $HOME/.dotfiles/boot/Linux/linux-boot.sh" || status=1
 fi
 
 # status of any aliases failing
