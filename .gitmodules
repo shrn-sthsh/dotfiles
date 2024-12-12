@@ -1,0 +1,6 @@
+[submodule "packages/mozilla/themes/i3wm/chrome"]
+	path = packages/mozilla/themes/i3wm/chrome
+	url = https://github.com/Dook97/firefox-qutebrowser-userchrome.git
+[submodule "packages/tridactyl/themes"]
+	path = packages/tridactyl/themes
+	url = https://github.com/tridactyl/base16-tridactyl.git

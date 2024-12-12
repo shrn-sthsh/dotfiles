@@ -40,8 +40,8 @@ fi
 unset rc
 
 # Load utilities
-if [ -d "$HOME/.dotfiles/bash/util/" ]; then
-  for script in "$HOME/.dotfiles/bash/util/"*.sh; do
+if [ -d "$HOME/.dotfiles/shell/util/" ]; then
+  for script in "$HOME/.dotfiles/shell/util/"*.sh; do
     if [ -f "$script" ]; then
       source "$script"
     fi
@@ -50,8 +50,8 @@ fi
 
 # Apply aliases
 aliasing_success=true
-if [ -f "$HOME/.dotfiles/bash/name.sh" ]; then
-  source "$HOME/.dotfiles/bash/name.sh"
+if [ -f "$HOME/.dotfiles/shell/name.sh" ]; then
+  source "$HOME/.dotfiles/shell/name.sh"
 
   if [ "$?" -ne 0 ]; then
     aliasing_success=false
@@ -59,13 +59,13 @@ if [ -f "$HOME/.dotfiles/bash/name.sh" ]; then
 fi
 
 # Set environment
-if [ -f $HOME/.dotfiles/bash/env.sh ]; then
-  source $HOME/.dotfiles/bash/env.sh
+if [ -f $HOME/.dotfiles/shell/env.sh ]; then
+  source $HOME/.dotfiles/shell/env.sh
 fi
 
 # Load modules
-if [ -d "$HOME/.dotfiles/bash/mod/" ]; then
-  for script in "$HOME/.dotfiles/bash/mod/"*.sh; do
+if [ -d "$HOME/.dotfiles/shell/mod/" ]; then
+  for script in "$HOME/.dotfiles/shell/mod/"*.sh; do
     if [ -f "$script" ]; then
       source "$script"
     fi

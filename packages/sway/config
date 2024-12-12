@@ -248,4 +248,4 @@ bindsym XF86PowerOff exec bash $HOME/System/sway/lockscreen.sh $wallpaper
 bindsym XF86Search exec $menu
 
 # Waybar
-exec_always --no-startup-id bash $HOME/.dotfiles/config/waybar/launch.sh
+exec_always --no-startup-id bash $HOME/.dotfiles/packages/waybar/launch.sh

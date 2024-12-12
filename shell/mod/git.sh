@@ -2,7 +2,7 @@
 
 
 # ensure git is installed
-installer_source_file="$HOME/.dotfiles/bash/util/install.sh"
+installer_source_file="$HOME/.dotfiles/shell/util/install.sh"
 if [[ ! " ${BASH_SOURCE[@]} " =~ " $installer_source_file " ]]; then
 
   if [ -f $installer_source_file ]; then

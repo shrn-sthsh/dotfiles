@@ -2,7 +2,7 @@
 
 
 # import installer
-installer_source_file="$HOME/.dotfiles/bash/util/install.sh"
+installer_source_file="$HOME/.dotfiles/shell/util/install.sh"
 if [[ ! " ${BASH_SOURCE[@]} " =~ " $installer_source_file " ]]; then
 
   if [ -f "$installer_source_file" ]; then
@@ -22,7 +22,7 @@ fi
 function set_aliasing()
 {
   # check for cache folder
-  cache="$HOME/.dotfiles/bash/.cache"
+  cache="$HOME/.dotfiles/shell/.cache"
   if ! [ -d "$cache" ]; then
     mkdir $cache
   fi 
@@ -42,7 +42,7 @@ function set_aliasing()
 function unset_aliasing()
 {
   # check for cache folder
-  cache="$HOME/.dotfiles/bash/.cache"
+  cache="$HOME/.dotfiles/shell/.cache"
   if ! [ -d "$cache" ]; then
     mkdir $cache
   fi 
@@ -67,7 +67,7 @@ function status_aliasing()
   fi
 
   # check for cache folder
-  cache="$HOME/.dotfiles/bash/.cache"
+  cache="$HOME/.dotfiles/shell/.cache"
   if ! [ -d "$cache" ]; then
     mkdir $cache
   fi 
@@ -92,7 +92,7 @@ function status_aliasing()
 if [[ $- == *i* ]]; then
 
   # check for cache folder
-  cache="$HOME/.dotfiles/bash/.cache"
+  cache="$HOME/.dotfiles/shell/.cache"
   if ! [ -d "$cache" ]; then
     mkdir $cache
   fi

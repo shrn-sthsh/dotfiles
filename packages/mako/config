@@ -1,7 +1,7 @@
 sort=-time
 layer=overlay
 anchor=top-center
-background-color=#2e3440
+background-color=#161636
 width=300
 height=110
 border-size=2
@@ -17,7 +17,7 @@ font=JetBrainsMonoNerdFont 10
 border-color=#635196
 
 [urgency=normal]
-border-color=#FFC552
+border-color=#9BCCBF
 
 [urgency=high]
 border-color=#FF761A

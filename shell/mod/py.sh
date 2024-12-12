@@ -2,7 +2,7 @@
 
 
 # import print utilities
-terminal_source_file="$HOME/.dotfiles/bash/util/terminal.sh"
+terminal_source_file="$HOME/.dotfiles/shell/util/terminal.sh"
 if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
 
   if [ -f $terminal_source_file ]; then
