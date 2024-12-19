@@ -253,11 +253,36 @@ last=0
 install_required_package "zoxide" || last=1
 if [ "$last" -eq 0 ]; then
   eval "$(zoxide init bash)"
-  alias cd="z"
+
+  function cd()
+  {
+    if [[ "$1" == "..." ]]; then
+      z ..
+    elif [[ "$1" == "...." ]]; then
+      z ../..
+    elif [[ "$1" == "....." ]]; then
+      z ../../..
+    else
+      z "$@"
+    fi
+  }
 
 else
   status=1
-fi
+
+  function cd() 
+  {
+    if [[ "$1" == "..." ]]; then
+      builtin cd ../..
+    elif [[ "$1" == "...." ]]; then
+      builtin cd ../../..
+    elif [[ "$1" == "....." ]]; then
+      builtin cd ../../..
+    else
+      builtin cd "$@"
+    fi
+  }
+fi 
 
 # file browsers
 safe_alias fb="ranger" || status=1
