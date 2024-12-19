@@ -35,7 +35,7 @@ function terminate_ssh_socket()
   local HOST="$2"
   local remote_clipboard="$3"
 
-  # Wait until no other processes are using the socket
+  # wait until no other processes are using the socket
   while true; do
     local active_sessions
     active_sessions=$(pgrep -af "ssh .* -oControlPath=$socket" | wc -l)
@@ -88,8 +88,9 @@ function csh()
   local remote_clipboard="$REMOTE_HOME/.clipboard"
 
   # fifo file on the remote server
-  command ssh -X -S$socket "$HOST" "bash -c 'mkdir -p $REMOTE_HOME && [ -p $REMOTE_HOME/.clipboard ] || mkfifo $REMOTE_HOME/.clipboard'" \
-    || { terminate_ssh_socket $socket $HOST $remote_clipboard; return 1; }
+  command ssh -X -S"$socket" "$HOST" "bash -c 'mkdir -p $REMOTE_HOME && \
+    [ -p $REMOTE_HOME/.clipboard ] || mkfifo $REMOTE_HOME/.clipboard'" \
+    || { terminate_ssh_socket "$socket" "$HOST" "$remote_clipboard"; return 1; }
 
   # silent clipboard listener: read remote pipe and sync to local clipboard
   (
