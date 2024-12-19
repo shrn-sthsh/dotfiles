@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 ## Functions
 # echo only in interactive shell
 function safe_echo()
