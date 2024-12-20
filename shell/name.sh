@@ -197,7 +197,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
   if [ "$last" -eq 0 ]; then
     alias kbd="brightnessctl --device='kbd_backlight' set" || status=1
 
-  else
+  elif [ "$last" == 1 ]; then
     status=1
   fi
 fi
@@ -228,7 +228,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     alias ll="eza -lh"
     alias tree="eza --tree"
 
-  else
+  elif [ "$last" == 1 ]; then
     status=1
   fi
 
@@ -240,7 +240,7 @@ elif [[ "$OSTYPE" == "linux-gnu" ]]; then
     alias ll="exa -lh"
     alias tree="exa --tree"
 
-  else
+  elif [ "$last" == 1 ]; then
     status=1
   fi
 fi
@@ -268,6 +268,10 @@ if [ "$last" -eq 0 ]; then
   }
 
 else
+  if [ "$last" == 1 ]; then
+    status=1
+  fi
+
   function cd() 
   {
     if [[ "$1" == "..." ]]; then
@@ -314,7 +318,7 @@ if [ "$last" -eq 0 ]; then
   alias vimdiff="nvim -d"
   alias nvimdiff="nvim -d"
 
-else
+elif [ "$last" == 1 ]; then
   status=1
 fi
 
@@ -327,7 +331,7 @@ if [ "$last" -eq 0 ]; then
   alias kill-session="tmux kill-session -t"
   alias kill-server="tmux kill-server"
 
-else
+elif [ "$last" == 1 ]; then
   status=1
 fi
 
