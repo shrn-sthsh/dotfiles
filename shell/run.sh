@@ -27,7 +27,9 @@ if [[ $OSTYPE == "darwin"* ]] && [[ -r "$(brew --prefix)/etc/profile.d/bash_comp
 fi
 
 # Space from prompt
-safe_echo ""
+if [[ $- != *i* ]]; then
+  echo ""
+fi
 
 
 ############################## Run dotfiles set up scripts #############################
