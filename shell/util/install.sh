@@ -17,7 +17,7 @@ fi
 
 ## package cache
 # cache
-package_cache="../.cache/package.cache"
+package_cache="$HOME/.dotfiles/shell/.cache/package.cache"
 
 # reset cache
 function reset_package_cache()
@@ -223,12 +223,13 @@ function safe_alias()
 
   # install source package of commands if it doesn't exist
   install_required_package -n "$base" 
+  status="$?"
   
-  if [ "$?" -eq 1 ]; then
+  if [ "$status" -eq 1 ]; then
     safe_echo -e "NOTE: Please install package for $base manually and rerun script for aliasing\n"
     return 1
-  elif [ "$?" -eq 2 ]; then
-    safe_echo -e "ERROR: Please install package for $base manually and rerun script for aliasing\n"
+  elif [ "$status" -eq 2 ]; then
+    safe_echo -e "ERROR: Please install package for $base manually and rerun script for aliasing"
     return 0
   fi
 
@@ -280,7 +281,7 @@ function force_alias()
     safe_echo -e "NOTE: Please install package for $base manually and rerun script for aliasing\n"
     return 1
   elif [ "$?" -eq 2 ]; then
-    safe_echo -e "ERROR: Please install package for $base manually and rerun script for aliasing\n"
+    safe_echo -e "ERROR: Please install package for $base manually and rerun script for aliasing"
     return 0
   fi
 

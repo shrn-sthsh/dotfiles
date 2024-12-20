@@ -175,6 +175,9 @@ fi
 
 
 ## Safe alias requirements
+# status of any aliases failing
+status=1
+
 # cargo
 export PATH=$PATH:$HOME/.cargo/bin/
 
@@ -210,9 +213,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then
   safe_alias boot="sudo bash $HOME/.dotfiles/boot/Linux/linux-boot.sh" || status=1
 fi
-
-# status of any aliases failing
-status=0
 
 
 ## Commands
@@ -268,8 +268,6 @@ if [ "$last" -eq 0 ]; then
   }
 
 else
-  status=1
-
   function cd() 
   {
     if [[ "$1" == "..." ]]; then

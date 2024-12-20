@@ -26,6 +26,9 @@ if [[ $OSTYPE == "darwin"* ]] && [[ -r "$(brew --prefix)/etc/profile.d/bash_comp
   source "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 fi
 
+# Space from prompt
+safe_echo ""
+
 
 ############################## Run dotfiles set up scripts #############################
 
@@ -59,8 +62,8 @@ if [ -f "$HOME/.dotfiles/shell/name.sh" ]; then
 fi
 
 # Set environment
-if [ -f $HOME/.dotfiles/shell/env.sh ]; then
-  source $HOME/.dotfiles/shell/env.sh
+if [ -f "$HOME/.dotfiles/shell/env.sh" ]; then
+  source "$HOME/.dotfiles/shell/env.sh"
 fi
 
 # Load modules
