@@ -57,7 +57,7 @@ if [ -d "$HOME/.config" ]; then
     echo -e "STATUS: Updating git ignore with non-overidden packages\n"
   fi 
   echo "# Ignore configurations not provieded by dotfiles \$HOME/.config" >> "$GIT_IGNORE"
-  grep '^>' "$BACKUP_LOG" | awk '{print $2}' | sed 's/\\//g' >> "$GIT_IGNORE"
+  grep '^>f' "$BACKUP_LOG" | awk '{print $2}' | sed 's/\//g' >> "$GIT_IGNORE"
 fi
 
 
@@ -67,16 +67,22 @@ function save_and_link()
   local source=$1
   local target=$2
 
-  if [[ $- != *i* ]]; then
-    echo "STATUS: Linking $source as $target"
-  fi 
+  # validate arguments
+  if ! [ -e "$source" ] || ! [ -e "$target" ]; then
+    return 1
+  fi
 
+  # save non-link items and unlink links
   if ! [ -L "$target" ]; then
     mv "$target" "$BACKUP_DIR"
   else
     unlink "$target"
   fi
 
+  # link non-link source as target 
+  if [[ $- != *i* ]]; then
+    echo "STATUS: Linking $source as $target"
+  fi 
   ln -s "$source" "$target"
 }
 
