@@ -1,2 +1,8 @@
 # caches
 *.cache*
+
+# logs
+./logs
+
+# packages
+./packages/.gitignore
