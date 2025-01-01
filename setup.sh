@@ -79,3 +79,6 @@ save_and_link "$HOME/.config/mozilla"      "$HOME/.mozilla"
 save_and_link "$HOME/.config/tmux"         "$HOME/.tmux"
 save_and_link "$HOME/.config/tmux/config"  "$HOME/.tmux.conf"
 save_and_link "$HOME/.config/conda/config" "$HOME/.condarc"
+
+# Reload config
+source "$HOME/.bashrc"
