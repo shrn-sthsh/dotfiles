@@ -230,7 +230,7 @@ function safe_alias()
     return 1
   elif [ "$status" -eq 2 ]; then
     safe_echo -e "ERROR: Please install package for $base manually and rerun script for aliasing"
-    return 0
+    return 2
   fi
 
   # create the alias
@@ -282,7 +282,7 @@ function force_alias()
     return 1
   elif [ "$?" -eq 2 ]; then
     safe_echo -e "ERROR: Please install package for $base manually and rerun script for aliasing"
-    return 0
+    return 2
   fi
 
   # create the alias
