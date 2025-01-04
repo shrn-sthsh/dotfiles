@@ -286,6 +286,15 @@ else
   }
 fi 
 
+# moving files
+function cmv() 
+{
+    local source="$1"
+    local target="$2"
+
+    mv "$source" "$target" && cd "$target"
+}
+
 # file browsers
 safe_alias fb="ranger" || status=1
 

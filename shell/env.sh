@@ -5,6 +5,10 @@
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
+## Files
+export rc="$HOME/.bashrc"
+export profile="$HOME/.bashrc"
+
 ## Directories
 # common
 if [ -d "$HOME/.dotfiles" ]; then

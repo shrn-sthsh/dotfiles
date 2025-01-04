@@ -55,8 +55,8 @@ fi
 
 # Apply aliases
 aliasing_success=true
-if [ -f "$HOME/.dotfiles/shell/name.sh" ]; then
-  source "$HOME/.dotfiles/shell/name.sh"
+if [ -f "$HOME/.dotfiles/shell/cmd.sh" ]; then
+  source "$HOME/.dotfiles/shell/cmd.sh"
 
   if [ "$?" -ne 0 ]; then
     aliasing_success=false
