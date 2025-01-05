@@ -16,6 +16,9 @@ fi
 setup_cache="$cache/setup.cache"
 if ! [ -f "$setup_cache" ]; then
   touch "$setup_cache"
+  echo "N" > "$setup_cache"
+elif ! [ -s "$setup_cache" ]; then
+  echo "N" > "$setup_cache"
 fi
 
 # exit if setup script has already been run
@@ -72,14 +75,21 @@ if [ -d "$CONFIG_DIR" ]; then
 
     touch "$IGNORE_FILE"
   fi
-  if [ -s "$IGNORE_FILE" ]; then
-    : > "$IGNORE_FILE"
+
+  # get index into file if non-empty
+  header="# Ignore configurations not provieded by dotfiles \$HOME/.config"
+  if grep -qF "$header" "$IGNORE_FILE"; then
+    cursor=$(grep -nF "$header" "$IGNORE_FILE" | cut -d: -f1)
+  else
+    echo "$header" >> "$IGNORE_FILE"
+    cursor=1
   fi
-  echo "# Ignore configurations not provieded by dotfiles \$HOME/.config" >> "$IGNORE_FILE"
 
   # backup all configurations files
   if [[ $- != *i* ]]; then
-    echo -e "STAGE:  Creating new .config with dotfiles custom configurations\n\tand linking all existing configurations not set by dotfiles"
+    echo "STAGE:  Creating new .config with dotfiles custom configurations"
+    echo -e "\tand linking all existing configurations not set by dotfiles"
+
     echo "NOTE:   All prior configurations will be saved in $BACKUP_DIR"
   fi
 
@@ -90,7 +100,7 @@ if [ -d "$CONFIG_DIR" ]; then
     backup="$BACKUP_DIR/config/$package"
 
     # skip already symlinked package directories and those already backed up
-    if [ -L "$node" ] || [ -d "$backup" ]; then
+    if [ -L "$node" ] || [ -d "$backup" ] || [[ "$package" == "$(basename "$IGNORE_FILE")" ]]; then
       continue
     fi
 
@@ -100,21 +110,19 @@ if [ -d "$CONFIG_DIR" ]; then
 
     # link non-overidden packages and add to git ignore
     target="$PACKAGE_DIR/$package"
-    if ! [ -e "$target" ]; then
+    if ! [ -e "$target" ] && ! grep -qF "$package" "$IGNORE_FILE"; then
       ln -s "$backup" "$target"
-      echo "/$package" >> "$IGNORE_FILE"
+      sed -i "${cursor}a$("/$package")" "$IGNORE_FILE"
       
+      cursor=$((cursor+1))
       linked=$((linked+1))
     fi
   done
-
   if [[ $- != *i* ]]; then
     echo -e "STATUS: Backed up $backed configurations out of which $linked were originals\n"
   fi 
-fi
 
-# replace prior .config with packages
-if [ -e "$CONFIG_DIR" ]; then
+  # replace prior .config with packages
   if [ -z "$(ls -A "$CONFIG_DIR")" ]; then
     rmdir "$CONFIG_DIR"
 
@@ -148,7 +156,7 @@ function save_and_link()
   # save non-link items and unlink links
   if [ -e "$target" ]; then
     if ! [ -L "$target" ]; then
-      mv "$target" "$BACKUP_DIR/$(echo "$target" | sed 's/^\.//')"
+      mv "$target" "$BACKUP_DIR/$(echo "$(basename "$target")" | sed 's/^\.//')"
     else
       unlink "$target"
     fi
