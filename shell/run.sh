@@ -45,8 +45,9 @@ fi
 unset rc
 
 # Load utilities
-if [ -d "$HOME/.dotfiles/shell/util/" ]; then
-  for script in "$HOME/.dotfiles/shell/util/"*.sh; do
+dotfiles="$HOME/.dotfiles"
+if [ -d "$dotfiles/shell/util/" ]; then
+  for script in "$dotfiles/shell/util/"*.sh; do
     if [ -f "$script" ]; then
       source "$script"
     fi
@@ -55,8 +56,8 @@ fi
 
 # Apply aliases
 aliasing_success=true
-if [ -f "$HOME/.dotfiles/shell/cmd.sh" ]; then
-  source "$HOME/.dotfiles/shell/cmd.sh"
+if [ -f "$dotfiles/shell/cmd.sh" ]; then
+  source "$dotfiles/shell/cmd.sh"
 
   if [ "$?" -ne 0 ]; then
     aliasing_success=false
@@ -64,17 +65,32 @@ if [ -f "$HOME/.dotfiles/shell/cmd.sh" ]; then
 fi
 
 # Set environment
-if [ -f "$HOME/.dotfiles/shell/env.sh" ]; then
-  source "$HOME/.dotfiles/shell/env.sh"
+if [ -f "$dotfiles/shell/env.sh" ]; then
+  source "$dotfiles/shell/env.sh"
 fi
 
 # Load modules
-if [ -d "$HOME/.dotfiles/shell/mod/" ]; then
-  for script in "$HOME/.dotfiles/shell/mod/"*.sh; do
+if [ -d "$dotfiles/shell/mod/" ]; then
+  for script in "$dotfiles/shell/mod/"*.sh; do
     if [ -f "$script" ]; then
       source "$script"
     fi
   done
+fi
+
+# Check for updates to configurations
+state="$dotfiles/shell/.cache/setup.cache" 
+if ! [ -f "$state" ]; then
+  bash "$dotfiles/setup.sh"
+else
+  linked="$(sed -n '2p' "$state")"
+  backed="$(sed -n '3p' "$state")"
+
+  actual="$(find "$HOME/.config" -mindepth 1 -maxdepth 1 -type d | wc -l)"
+  expect="$(("$backed" - "$linked"))"
+  if [ "$actual" -gt "$expect" ]; then
+    bash "$dotfiles/setup.sh"
+  fi
 fi
 
 

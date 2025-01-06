@@ -22,10 +22,11 @@ elif ! [ -s "$setup_cache" ]; then
 fi
 
 # exit if setup script has already been run
-read -r setup_state < $setup_cache
+setup_state="$(sed -n  '1p' "$setup_cache")"
 if [[ "$setup_state" == "Y" ]]; then
   if [[ $- != *i* ]]; then
-    echo -e "NOTE:   Initial setup has already been done;\n\trerun will check for new packages to backup and link\n"
+    echo "NOTE:   Initial setup has already been done;"
+    echo -e "\trerun will check for new packages to backup and link\n"
   fi
 fi 
 
@@ -82,7 +83,7 @@ if [ -d "$CONFIG_DIR" ]; then
     cursor=$(grep -nF "$header" "$IGNORE_FILE" | cut -d: -f1)
   else
     echo "$header" >> "$IGNORE_FILE"
-    cursor=1
+    cursor=2 # files are one-indexed
   fi
 
   # backup all configurations files
@@ -112,7 +113,7 @@ if [ -d "$CONFIG_DIR" ]; then
     target="$PACKAGE_DIR/$package"
     if ! [ -e "$target" ] && ! grep -qF "$package" "$IGNORE_FILE"; then
       ln -s "$backup" "$target"
-      sed -i "${cursor}a$("/$package")" "$IGNORE_FILE"
+      sed -i "${cursor}a /$package" "$IGNORE_FILE"
       
       cursor=$((cursor+1))
       linked=$((linked+1))
@@ -121,6 +122,22 @@ if [ -d "$CONFIG_DIR" ]; then
   if [[ $- != *i* ]]; then
     echo -e "STATUS: Backed up $backed configurations out of which $linked were originals\n"
   fi 
+
+  # update packages' metadata in cache
+  linked_state="$(sed -n '2p' "$setup_cache")"
+  backed_state="$(sed -n '3p' "$setup_cache")"
+  if [ -z "$linked_state" ] || [ -z "$backed_state" ]; then
+    echo "$linked" >> "$setup_cache"
+    echo "$backed" >> "$setup_cache"
+
+  else
+    if [ "$linked" -gt "$linked_state" ]; then
+      sed -i "2s/.*/$linked/" "$setup_cache"
+    fi
+    if [ "$backed" -gt "$backed_state" ]; then
+      sed -i "3s/.*/$backed/" "$setup_cache"
+    fi
+  fi
 
   # replace prior .config with packages
   if [ -z "$(ls -A "$CONFIG_DIR")" ]; then
