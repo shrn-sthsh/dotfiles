@@ -18,6 +18,11 @@ if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
 fi
 
 
+# known keys paths and filenames
+vpn_comp="$HOME/.keys/vpn.zip"
+gtvpn_comp="$HOME/.keys/gtvpn.zip"
+gtvpn_file="gtvpnkey"
+
 # vpn service
 alias openconnect='sudo openconnect --background'
 function vpn()
@@ -69,11 +74,11 @@ function vpn-key()
     safe_echo "ERROR: Must provide path to key or known vpn hostkey"
     return 1
   elif [ "$1" == "gt" ]; then
-    local keypath="$HOME/Projects/gtvpn.zip"
+    local keypath="$gtvpn_comp"
     local keyfile="gtvpnkey"
   else
     local keypath="$2"
-    local keyfile=$(basename "$HOME/Projects/vpn.zip" .zip | sed 's/^//;s/.*\///')
+    local keyfile=$(basename "$vpn_comp" ".zip" | sed 's/^//;s/.*\///')
   fi 
 
   if ! [ -f $keypath ]; then
@@ -125,8 +130,8 @@ function vpn-connect()
   fi
 
   if [ "$1" == "gt" ]; then
-    local keypath="$HOME/Projects/gtvpn.zip"
-    local keyfile="gtvpnkey"
+    local keypath="$gtvpn_comp"
+    local keyfile="$gtvpn_file"
 
     if ! [ -f $keypath ]; then
       safe_echo -e "WARNING: path to vpn key doesn't exist; must enter passkey manually\n"

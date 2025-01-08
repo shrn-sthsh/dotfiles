@@ -19,32 +19,36 @@ if [[ ! " ${BASH_SOURCE[@]} " =~ " $installer_source_file " ]]; then
 fi
 
 
+# known key paths and filenames
+key_comp="$HOME/.keys/git.zip"
+key_file="gitkey"
+
 # git with github key
 function git-key()
 {
   if [ "$1" == "-v" ] || [ "$1" == "--verbose" ]; then
-    unzip $HOME/Projects/git.zip gitkey && \
-      cat gitkey && rm gitkey
+    unzip "$key_comp" "$key_file" && \
+      cat "$key_file" && rm "$key_file"
 
   elif [[ "$OSTYPE" == "darwin"* ]]; then
-    unzip $HOME/Projects/git.zip gitkey && \
-      cat gitkey | pbcopy && \
-      rm gitkey
+    unzip "$key_comp" "$key_file" && \
+      cat "$key_file" | pbcopy && \
+      rm "$key_file"
 
   elif [ "$OSTYPE" == "linux-gnu" ]; then
     if [[ $(tty) =~ "/dev/tty" ]]; then
-      unzip $HOME/Projects/git.zip gitkey && \
-        cat gitkey && rm gitkey
+      unzip "$key_comp" "$key_file" && \
+        cat "$key_file" && rm "$key_file"
 
     elif [ "$XDG_SESSION_TYPE" == "wayland" ]; then
-      unzip $HOME/Projects/git.zip gitkey && \
-        cat gitkey | wl-copy && \
-        rm gitkey 
+      unzip "$key_comp" "$key_file" && \
+        cat "$key_file" | wl-copy && \
+        rm "$key_file" 
 
     else 
-      zip $HOME/Projects/git.zip gitkey && \
-        cat gitkey | xsel --clipboard && \
-        rm gitkey
+      zip "$key_file" && \
+        cat "$key_file" | xsel --clipboard && \
+        rm "$key_file"
     fi
   fi
 }

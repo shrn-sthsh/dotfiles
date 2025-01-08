@@ -1,31 +1,35 @@
 #!/bin/bash
 
 
+# known key paths and filenames
+key_comp="$HOME/.keys/hf.zip"
+key_file="hfkey"
+
 # Hugging Face master API
 function hf()
 {
   if [ "$1" == "key" ]; then
     if [ "$2" == "-v" ] || [ "$2" == "--verbose" ]; then
-      unzip $HOME/Projects/hf.zip hfkey && \
+      unzip "$key_comp" "$key_file" && \
         cat hfkey && rm hfkey
 
     elif [[ "$OSTYPE" == "darwin"* ]]; then
-      unzip $HOME/Projects/hf.zip hfkey && \
+      unzip "$key_comp" "$key_file" && \
         cat hfkey | pbcopy && \
         rm hfkey
 
     elif [ "$OSTYPE" == "linux-gnu" ]; then
       if [[ $(tty) =~ "/dev/tty" ]]; then
-        unzip $HOME/Projects/hf.zip hfkey && \
+        unzip "$key_comp" "$key_file" && \
           cat hfkey && rm hfkey
 
       elif [ "$XDG_SESSION_TYPE" == "wayland" ]; then
-        unzip $HOME/Projects/hf.zip hfkey && \
+        unzip "$key_comp" "$key_file" && \
           cat hfkey | wl-copy && \
           rm hfkey 
 
       else 
-        zip $HOME/Projects/hf.zip hfkey && \
+        zip "$key_comp" "$key_file" && \
           cat hfkey | xsel --clipboard && \
           rm hfkey
       fi
