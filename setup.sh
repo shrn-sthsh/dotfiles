@@ -139,6 +139,11 @@ if [ -d "$CONFIG_DIR" ]; then
     fi
   fi
 
+  # clean up remaining gitignore
+  if [ -e "$CONFIG_DIR/.gitignore" ]; then
+    mv "$CONFIG_DIR/.gitignore" "$BACKUP_DIR/config/"
+  fi
+  
   # replace prior .config with packages
   if [ -z "$(ls -A "$CONFIG_DIR")" ]; then
     rmdir "$CONFIG_DIR"
@@ -150,7 +155,7 @@ if [ -d "$CONFIG_DIR" ]; then
       mkdir -p "$REMAIN_DIR"
     fi
 
-    mv "$CONFIG_DIR" "$REMAIN_DIR"
+    mv "$CONFIG_DIR"/* "$REMAIN_DIR"
   fi
 fi
 if ! [ -e "$CONFIG_DIR" ]; then
