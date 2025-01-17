@@ -20,35 +20,35 @@ fi
 
 
 # known key paths and filenames
-key_comp="$HOME/.keys/git.zip"
-key_file="gitkey"
+git_key_comp="$HOME/.keys/git.zip"
+git_key_file="gitkey"
 
 # git with github key
 function git-key()
 {
   if [ "$1" == "-v" ] || [ "$1" == "--verbose" ]; then
-    unzip "$key_comp" "$key_file" && \
-      cat "$key_file" && rm "$key_file"
+    unzip "$git_key_comp" "$git_key_file" && \
+      cat "$git_key_file" && rm "$git_key_file"
 
   elif [[ "$OSTYPE" == "darwin"* ]]; then
-    unzip "$key_comp" "$key_file" && \
-      cat "$key_file" | pbcopy && \
-      rm "$key_file"
+    unzip "$git_key_comp" "$git_key_file" && \
+      cat "$git_key_file" | pbcopy && \
+      rm "$git_key_file"
 
   elif [ "$OSTYPE" == "linux-gnu" ]; then
     if [[ $(tty) =~ "/dev/tty" ]]; then
-      unzip "$key_comp" "$key_file" && \
-        cat "$key_file" && rm "$key_file"
+      unzip "$git_key_comp" "$git_key_file" && \
+        cat "$git_key_file" && rm "$git_key_file"
 
     elif [ "$XDG_SESSION_TYPE" == "wayland" ]; then
-      unzip "$key_comp" "$key_file" && \
-        cat "$key_file" | wl-copy && \
-        rm "$key_file" 
+      unzip "$git_key_comp" "$git_key_file" && \
+        cat "$git_key_file" | wl-copy && \
+        rm "$git_key_file" 
 
     else 
-      zip "$key_file" && \
-        cat "$key_file" | xsel --clipboard && \
-        rm "$key_file"
+      zip "$git_key_file" && \
+        cat "$git_key_file" | xsel --clipboard && \
+        rm "$git_key_file"
     fi
   fi
 }
