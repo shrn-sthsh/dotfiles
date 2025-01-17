@@ -1,0 +1,46 @@
+set window-title-basename "true"
+set selection-clipboard "clipboard"
+set font 'JetBrainsMono Nerd Font normal 12'
+
+# Falcon color theme for Zathura
+set notification-error-bg    #ff761a  #Red
+set notification-error-fg    #393959  #Foreground
+set notification-warning-bg  #ffc552  #Orange
+set notification-warning-fg  #bfdaff  #Selection
+set notification-bg          #202040  #Background
+set notification-fg          #4d4d6d  #Foreground
+
+set completion-bg            #161636  #Background
+set completion-fg            #434363  #Comment
+set completion-group-bg      #2a2a4a  #Background
+set completion-group-fg      #635196  #Comment
+set completion-highlight-bg  #bfdaff  #Selection
+set completion-highlight-fg  #6699cc  #Foreground
+
+set index-bg                 #161636  #Background
+set index-fg                 #a1bce1  #Foreground
+set index-active-bg          #393959  #Current Line
+set index-active-fg          #9bccbf  #Foreground
+
+set inputbar-bg              #161636  #Background
+set inputbar-fg              #9bccbf  #Foreground
+set statusbar-bg             #9bccbf  #Background
+set statusbar-fg             #161636  #Foreground
+
+set highlight-color          #ffc552  #Orange
+set highlight-active-color   #ffd392  #Pink
+
+set default-bg               #161636  #Background
+set default-fg               #bfdaff  #Foreground
+
+set render-loading           true
+set render-loading-fg        #635196  #Background
+set render-loading-bg        #4d4d6d #Foreground
+
+# Recolor mode settings
+set recolor-lightcolor       #161636   Background
+set recolor-darkcolor        #bfdaff   Foreground
+
+# Startup options
+set adjust-open width
+set recolor true
