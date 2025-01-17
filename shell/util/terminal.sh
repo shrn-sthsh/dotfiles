@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 
 ## Functions
@@ -47,14 +47,26 @@ function set_bash_prompt()
   fi
 
   # ANSI bash terminal colors
-  local    RED="\[\033[0;31m\]"
-  local  GREEN="\[\033[0;32m\]"
-  local YELLOW="\[\033[1;33m\]"
-  local   BLUE="\[\033[1;34m\]"
-  local PURPLE="\[\033[0;35m\]"
-  local   CYAN="\[\033[0;36m\]"
-  local  WHITE="\[\033[1;37m\]"
-  local  CLEAR="\[\e[0m\]"
+
+  if [[ "$0" == *zsh* ]]; then
+    local    RED="$red"
+    local  GREEN="$green"
+    local YELLOW="$yellow"
+    local   BLUE="$blue"
+    local PURPLE="$purple"
+    local   CYAN="$cyan"
+    local  WHITE="$white"
+    local  CLEAR="$clear"
+  else
+    local    RED="\[\033[0;31m\]"
+    local  GREEN="\[\033[0;32m\]"
+    local YELLOW="\[\033[1;33m\]"
+    local   BLUE="\[\033[1;34m\]"
+    local PURPLE="\[\033[0;35m\]"
+    local   CYAN="\[\033[0;36m\]"
+    local  WHITE="\[\033[1;37m\]"
+    local  CLEAR="\[\e[0m\]"
+  fi
 
   # Turn off showing environment
   export VIRTUAL_ENV_DISABLE_PROMPT=1
@@ -89,18 +101,32 @@ function set_bash_prompt()
   }
 
   # set style and colors
-  prompt=$prompt"${YELLOW}\t"
-  prompt=$prompt"${CLEAR}\`space-open-bracket-symbol\`"
-  prompt=$prompt"${GREEN}\`parse_python_env\`"
-  prompt=$prompt"${CLEAR}\`close-bracket-symbol\`"
-  prompt=$prompt"$CLEAR ["
-  prompt=$prompt"${BLUE}\u${CLEAR}@${CYAN}\h"
-  prompt=$prompt"${PURPLE} \`parse_git_branch\`"
-  prompt=$prompt"${CLEAR}\`resolve-symbol\`"
-  prompt=$prompt"${RED}\W"
-  prompt=$prompt"${CLEAR}]: "
-  prompt=$prompt"${WHITE}"
+  if [[ "$0" == *zsh* ]]; then
+    prompt=$prompt"${YELLOW}\*"
+    prompt=$prompt"${CLEAR}\`space-open-bracket-symbol\`"
+    prompt=$prompt"${GREEN}\`parse_python_env\`"
+    prompt=$prompt"${CLEAR}\`close-bracket-symbol\`"
+    prompt=$prompt"$CLEAR ["
+    prompt=$prompt"${BLUE}%n${CLEAR}@${CYAN}%m"
+    prompt=$prompt"${PURPLE} \`parse_git_branch\`"
+    prompt=$prompt"${CLEAR}\`resolve-symbol\`"
+    prompt=$prompt"${RED}%d"
+    prompt=$prompt"${CLEAR}]: "
+    prompt=$prompt"${WHITE}"
+  else 
+    prompt=$prompt"${YELLOW}\t"
+    prompt=$prompt"${CLEAR}\`space-open-bracket-symbol\`"
+    prompt=$prompt"${GREEN}\`parse_python_env\`"
+    prompt=$prompt"${CLEAR}\`close-bracket-symbol\`"
+    prompt=$prompt"$CLEAR ["
+    prompt=$prompt"${BLUE}\u${CLEAR}@${CYAN}\h"
+    prompt=$prompt"${PURPLE} \`parse_git_branch\`"
+    prompt=$prompt"${CLEAR}\`resolve-symbol\`"
+    prompt=$prompt"${RED}\W"
+    prompt=$prompt"${CLEAR}]: "
+    prompt=$prompt"${WHITE}"
 
+  fi
   unset PS1
   export PS1="$prompt"
   CUSTOM_PROMPT_SET=true

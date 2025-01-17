@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 FILENAME="screenshot-`date +%F-%T`"
 FILEPATH="$HOME/Pictures/Screenshots/$FILENAME.png"

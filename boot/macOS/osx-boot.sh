@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 
 # run main boot volume picker

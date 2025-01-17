@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 
 # known key paths and filenames

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Check on macOS
 if [[ "$OSTYPE" != "darwin"* ]]; then

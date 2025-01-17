@@ -1,4 +1,4 @@
-# .bashrc
+# .rc
 
 
 ############################## Set up PATH & bash completion ###########################
@@ -87,7 +87,7 @@ else
   backed="$(sed -n '3p' "$state")"
 
   actual="$(find "$HOME/.config" -mindepth 1 -maxdepth 1 -type d | wc -l)"
-  expect="$(("$backed" - "$linked"))"
+  expect="$(($backed-$linked))"
   if [ "$actual" -gt "$expect" ]; then
     bash "$dotfiles/setup.sh"
   fi
@@ -105,7 +105,7 @@ set_bash_prompt
 set -o vi
 
 # Double console font size if running in Linux TTY
-if [[ "$OSTYPE" == "linux-gnu" ]] && [[ $(tty) =~ "/dev/tty" ]] && [[ $- == *i* ]]; then
+if [[ "$OSTYPE" == "linux-gnu" ]] && [[ "$(tty)" =~ "/dev/tty" ]] && [[ "$-" == *i* ]]; then
   setfont ter-u32n
   sleep 1.5
 fi

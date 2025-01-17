@@ -1,5 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
+
+## Alias calls
+# echo
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  alias echo="echo -e"
+fi
 
 ## Setup state check
 if [[ $- != *i* ]]; then
@@ -26,7 +32,7 @@ setup_state="$(sed -n  '1p' "$setup_cache")"
 if [[ "$setup_state" == "Y" ]]; then
   if [[ $- != *i* ]]; then
     echo "NOTE:   Initial setup has already been done;"
-    echo -e "\trerun will check for new packages to backup and link\n"
+    echo "\trerun will check for new packages to backup and link\n"
   fi
 fi 
 
@@ -43,13 +49,13 @@ BACKUP_DIR="$HOME/.backup"
 
 ## Ensure dotfiles' root at home
 if [[ $- != *i* ]]; then
-  echo -e "STAGE:  Ensuring dotfiles is dot folder at user root"
+  echo "STAGE:  Ensuring dotfiles is dot folder at user root"
 fi 
 
 # check if already correct
 if [ "$CURRENT_DIR" != "$PROJECT_DIR" ]; then
   if [[ $- != *i* ]]; then
-    echo -e "STATUS: dotfiles moved into $HOME as .dotfiles\n"
+    echo "STATUS: dotfiles moved into $HOME as .dotfiles\n"
   fi
 
   mv "$CURRENT_DIR" "$PROJECT_DIR"
@@ -89,7 +95,7 @@ if [ -d "$CONFIG_DIR" ]; then
   # backup all configurations files
   if [[ $- != *i* ]]; then
     echo "STAGE:  Creating new .config with dotfiles custom configurations"
-    echo -e "\tand linking all existing configurations not set by dotfiles"
+    echo "\tand linking all existing configurations not set by dotfiles"
 
     echo "NOTE:   All prior configurations will be saved in $BACKUP_DIR"
   fi
@@ -98,10 +104,19 @@ if [ -d "$CONFIG_DIR" ]; then
   linked=0
   for node in "$CONFIG_DIR"/* "$CONFIG_DIR"/.*; do
     package=$(basename "$node")
+    target="$PACKAGE_DIR/$package"
     backup="$BACKUP_DIR/config/$package"
 
-    # skip already symlinked package directories and those already backed up
-    if [ -L "$node" ] || [ -d "$backup" ] || [[ "$package" == "$(basename "$IGNORE_FILE")" ]]; then
+    # skip already linked or backed up package directories
+    if [ -L "$node" ] || [ -d "$backup" ]; then
+      continue
+
+    # skip the package if it's the git ignore file
+    elif [[ "$package" == "$(basename "$IGNORE_FILE")" ]]; then
+      continue
+      
+    # skip if the package is tracked by git (not a new package)
+    elif git ls-files --error-unmatch "$target" &> /dev/null; then
       continue
     fi
 
@@ -110,17 +125,18 @@ if [ -d "$CONFIG_DIR" ]; then
     backed=$((backed+1))
 
     # link non-overidden packages and add to git ignore
-    target="$PACKAGE_DIR/$package"
-    if ! [ -e "$target" ] && ! grep -qF "$package" "$IGNORE_FILE"; then
+    if ! [ -e "$target" ]; then
       ln -s "$backup" "$target"
-      sed -i "${cursor}a /$package" "$IGNORE_FILE"
-      
-      cursor=$((cursor+1))
       linked=$((linked+1))
+
+      if ! grep -qF "$package" "$IGNORE_FILE"; then
+        sed -i '' "${cursor}a /$package" "$IGNORE_FILE"
+        cursor=$((cursor+1))
+      fi 
     fi
   done
   if [[ $- != *i* ]]; then
-    echo -e "STATUS: Backed up $backed configurations out of which $linked were originals\n"
+    echo "STATUS: Backed up $backed configurations out of which $linked were originals\n"
   fi 
 
   # update packages' metadata in cache
@@ -132,10 +148,10 @@ if [ -d "$CONFIG_DIR" ]; then
 
   else
     if [ "$linked" -gt "$linked_state" ]; then
-      sed -i "2s/.*/$linked/" "$setup_cache"
+      sed -i '' "2s/.*/$linked/" "$setup_cache"
     fi
     if [ "$backed" -gt "$backed_state" ]; then
-      sed -i "3s/.*/$backed/" "$setup_cache"
+      sed -i '' "3s/.*/$backed/" "$setup_cache"
     fi
   fi
 
@@ -168,7 +184,7 @@ fi
 function save_and_link() 
 {
   local source=$1
-  local target=$2
+  local targets=${@:2}
 
   # validate arguments
   if ! [ -e "$source" ]; then
@@ -176,26 +192,34 @@ function save_and_link()
   fi
 
   # save non-link items and unlink links
-  if [ -e "$target" ]; then
-    if ! [ -L "$target" ]; then
-      mv "$target" "$BACKUP_DIR/$(echo "$(basename "$target")" | sed 's/^\.//')"
-    else
-      unlink "$target"
+  for target in $targets; do
+    if [ -e "$target" ]; then
+      if ! [ -L "$target" ]; then
+        mv "$target" "$BACKUP_DIR/$(echo "$(basename "$target")" | sed 's/^\.//')"
+      else
+        unlink "$target"
+      fi
     fi
-  fi
+  done
 
   # link non-link source as target 
   if [[ $- != *i* ]]; then
-    echo "STATUS: Linking $source as $target"
+    if [ "${#targets[@]}" -gt 1 ]; then
+      echo "STATUS: Linking $source as ["$(${targets[@]} | tr ' ' ,)"]"
+    else
+      echo "STATUS: Linking $source as $targets"
+    fi
   fi 
-  ln -s "$source" "$target"
+  for target in $targets; do
+    ln -s "$source" "$target"
+  done
 }
 
 # backup and link special targets
 if [[ $- != *i* ]]; then
   echo "STAGE:  Saving and linking special files and directories"
 fi
-save_and_link "$PROJECT_DIR/shell/run.sh"  "$HOME/.bashrc"
+save_and_link "$PROJECT_DIR/shell/run.sh"  "$HOME/.bashrc"    "$HOME/.zshrc"
 save_and_link "$HOME/.config/mozilla"      "$HOME/.mozilla"
 save_and_link "$HOME/.config/tmux"         "$HOME/.tmux"
 save_and_link "$HOME/.config/tmux/config"  "$HOME/.tmux.conf"
@@ -209,4 +233,12 @@ if [[ "$setup_state" == "N" ]]; then
 fi
 
 # reload config
-source "$HOME/.bashrc"
+if [[ "$0" == *zsh* ]]; then
+  source "$HOME/.zshrc"
+elif [[ "$0" == *bash* ]]; then
+  source "$HOME/.bashrc"
+fi
+
+## Unalias calls
+# echo
+unalias echo

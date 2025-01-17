@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 
 # Script only for Linux Systems

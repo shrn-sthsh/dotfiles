@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 
 # import installer
@@ -176,7 +176,7 @@ fi
 
 ## Safe alias requirements
 # status of any aliases failing
-status=1
+status=0
 
 # cargo
 export PATH=$PATH:$HOME/.cargo/bin/
@@ -297,6 +297,13 @@ function cmv()
 
 # file browsers
 safe_alias fb="ranger" || status=1
+
+# file viewer
+install_required_package "zathura" || status=1
+function fw()
+{
+  zathura "$@" &> /dev/null &
+}
 
 # line count
 safe_alias lc="xargs wc -l" || status=1

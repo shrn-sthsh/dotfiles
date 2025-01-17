@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## Terminal
 # default editor
@@ -6,8 +6,15 @@ export VISUAL=nvim
 export EDITOR="$VISUAL"
 
 ## Files
-export rc="$HOME/.bashrc"
-export profile="$HOME/.bashrc"
+# shell configurations
+if [[ "$0" == *zsh* ]]; then
+  export rc="$HOME/.zshrc"
+  export pf="$HOME/.zshenv"
+
+elif [[ "$0" == *bash* ]]; then
+  export rc="$HOME/.bashrc"
+  export pf="$HOME/.bash_profile"
+fi
 
 ## Directories
 # common
