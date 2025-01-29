@@ -302,6 +302,14 @@ safe_alias fb="ranger" || status=1
 install_required_package "zathura" || status=1
 function fw()
 {
+  if [ "$#" -eq 0 ]; then
+    if [[ $- == *i* ]]; then
+      echo "ERROR: no file path provided"
+    fi
+
+    return 1
+  fi
+
   zathura "$@" &> /dev/null &
 }
 
