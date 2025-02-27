@@ -3,9 +3,11 @@
 
 # import print utilities
 terminal_source_file="$HOME/.dotfiles/shell/util/terminal.sh"
-if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
+if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]];
+then
 
-  if [ -f $terminal_source_file ] ; then
+  if [ -f $terminal_source_file ] ;
+  then
     source $terminal_source_file
 
   else
@@ -22,7 +24,8 @@ package_cache="$HOME/.dotfiles/shell/.cache/package.cache"
 # reset cache
 function reset_package_cache()
 {
-  if [ -f "$package_cache" ]; then
+  if [ -f "$package_cache" ];
+  then
     : > "$package_cache"
     return 0
   fi
@@ -36,38 +39,48 @@ function reset_package_cache()
 # install package which provides a command
 function install_command_package() 
 {
-  if [[ "$1" == "-n" ]]; then
+  if [[ "$1" == "-n" ]];
+  then
     local cmd=$2
     local top=false
 
   else
     local cmd=$1
-    if [[ "$2" == "-n" ]]; then local top=false 
+    if [[ "$2" == "-n" ]];
+    then local top=false 
     else local top=true; fi
   fi
 
-  if [ -z "$cmd" ]; then
+  if [ -z "$cmd" ];
+  then
       safe_echo -n "ERROR: No command provided"
-      if [ "$top" = true ]; then safe_new_line; fi
+      if [ "$top" = true ];
+      then safe_new_line; fi
       return 1
   fi
 
   # pacman alias command
-  if ! type pacman &> /dev/null || [ "$cmd" == "pacman" ]; then
-    if ! type sudo &> /dev/null; then
+  if ! type pacman &> /dev/null || [ "$cmd" == "pacman" ];
+  then
+    if ! type sudo &> /dev/null;
+    then
       safe_echo -n "ERROR: \"sudo\" must be installed before running installation script"
-      if [ "$top" = true ]; then safe_new_line; fi
+      if [ "$top" = true ];
+      then safe_new_line; fi
 
       return 1
     fi
-    if ! type cargo &> /dev/null; then
+    if ! type cargo &> /dev/null;
+    then
       safe_echo "ERROR: Cargo must be installed before running installation script"
-      if [ "$top" = true ]; then safe_new_line; fi
+      if [ "$top" = true ];
+      then safe_new_line; fi
 
       return 1
     fi
     
-    if [[ "$OSTYPE" == "darwin"* ]]; then
+    if [[ "$OSTYPE" == "darwin"* ]];
+    then
       cargo install pacapt
       alias pacman='pacapt'
     else
@@ -77,58 +90,70 @@ function install_command_package()
   fi
 
   # attempt to install the command 
-  if ! sudo -v 2> /dev/null; then
+  if ! sudo -v 2> /dev/null;
+  then
     safe_echo -e "ERROR: Must be a sudoer to install source packages"
     safe_echo -e "NOTE: Adding binaries to ~/.bin is an alternative if not a sudoer"
 
-    if [ "$top" = true ]; then safe_new_line; fi
+    if [ "$top" = true ];
+    then safe_new_line; fi
     return 1
   fi
   sudo pacman -S "$cmd" -- -q -y > /dev/null 2>&1
 
   # recheck if the command exists after installation
-  if ! type "$cmd" &> /dev/null; then
+  if ! type "$cmd" &> /dev/null;
+  then
     safe_echo -e "FAILURE: Unable find or install source package with '$cmd'"
     safe_echo -e "NOTE: Try updating package manager and if that fails consider a package binary for ~/.bin"
 
-    if [ "$top" = true ]; then safe_new_line; fi
+    if [ "$top" = true ];
+    then safe_new_line; fi
     return 1
   fi
 
   safe_echo "SUCCESS: Source package installed"
-  if [ "$top" = true ]; then safe_new_line; fi
+  if [ "$top" = true ];
+  then safe_new_line; fi
   return 0
 }
 
 # install required package for a command
 function install_required_package()
 {
-  if [[ "$1" == "-n" ]]; then
+  if [[ "$1" == "-n" ]];
+  then
     local cmd="$2"
     local top=false
 
   else
     local cmd="$1"
-    if [[ "$2" == "-n" ]]; then 
+    if [[ "$2" == "-n" ]];
+    then 
       local top=false
     else 
       local top=true; 
     fi
   fi
 
-  if [ -z "$cmd" ]; then
+  if [ -z "$cmd" ];
+  then
       safe_echo -n "ERROR: No command provided"
-      if [ "$top" = true ]; then safe_new_line; fi
+      if [ "$top" = true ];
+      then safe_new_line; fi
       return 1
   fi
 
   # attempt to install required package
   install_code=0
-  if ! type "$cmd" &> /dev/null; then
+  if ! type "$cmd" &> /dev/null;
+  then
 
     # exit if known package (can not be installed)
-    if [ -f "$package_cache" ]; then
-      if grep -Fxq "$cmd" "$package_cache"; then
+    if [ -f "$package_cache" ];
+    then
+      if grep -Fxq "$cmd" "$package_cache";
+      then
         return 2
       fi 
     
@@ -139,7 +164,8 @@ function install_required_package()
 
     # try installing base package
     safe_echo "Command '$cmd' not found; attempting to install source package... "
-    if [ "$top" = true ]; then
+    if [ "$top" = true ];
+    then
       install_command_package "$cmd"
       install_code=$?
     else
@@ -148,7 +174,8 @@ function install_required_package()
     fi
 
     # save to failed packages if installation fails
-    if [ "$install_code" -eq 1 ]; then
+    if [ "$install_code" -eq 1 ];
+    then
       echo "$cmd" >> "$package_cache"
       sort "$package_cache" -o "$package_cache"
     fi
@@ -161,7 +188,8 @@ function install_required_package()
 function load_package_module() 
 {
   local mod=$1
-  if [ -z "$mod" ]; then
+  if [ -z "$mod" ];
+  then
       safe_echo -n "ERROR: No module provided"
       return 1
   fi
@@ -169,10 +197,12 @@ function load_package_module()
   safe_echo "Loading module '$mod'... "
 
   # check if can be loaded as module
-  if type module &> /dev/null; then
+  if type module &> /dev/null;
+  then
 
     # check if module is already loaded
-    if module list 2>&1 | grep "$mod" &> /dev/null; then
+    if module list 2>&1 | grep "$mod" &> /dev/null;
+    then
       safe_echo -e "SUCCESS: Module was already loaded"
       return 0
     fi
@@ -181,7 +211,8 @@ function load_package_module()
     module load "$mod" &> /dev/null
 
     # check now if module is loaded
-    if ! module list 2>&1 | grep "$mod" &> /dev/null; then
+    if ! module list 2>&1 | grep "$mod" &> /dev/null;
+    then
       safe_echo -e "FAILURE: Unable find or load package module '$mod'"
       return 1
     fi
@@ -204,7 +235,8 @@ function safe_alias()
 
   # extract environment variables
   local vars=""
-  while [[ "$full_cmd" =~ ^[A-Za-z_]+[A-Za-z0-9_]*= ]]; do
+  while [[ "$full_cmd" =~ ^[A-Za-z_]+[A-Za-z0-9_]*= ]]; 
+  do
     var="${full_cmd%% *}"
     vars="$vars $var"
     full_cmd="${full_cmd#* }"
@@ -215,7 +247,8 @@ function safe_alias()
   local cmd="$(safe_echo -e "${full_cmd}" | sed -e 's/^[[:space:]]*//')"
 
   # extract base command ignoring sudo
-  if [[ "$cmd" =~ ^sudo[[:space:]]+ ]]; then
+  if [[ "$cmd" =~ ^sudo[[:space:]]+ ]];
+  then
     local base=$(safe_echo "$cmd" | awk '{for (i=2; i<=NF; i++) {print $i; exit}}')
   else
     local base=$(safe_echo "$cmd" | awk '{print $1}')
@@ -225,16 +258,19 @@ function safe_alias()
   install_required_package -n "$base" 
   status="$?"
   
-  if [ "$status" -eq 1 ]; then
+  if [ "$status" -eq 1 ];
+  then
     safe_echo -e "NOTE: Please install package for $base manually and rerun script for aliasing\n"
     return 1
-  elif [ "$status" -eq 2 ]; then
+  elif [ "$status" -eq 2 ];
+  then
     safe_echo -e "ERROR: Please install package for $base manually and rerun script for aliasing"
     return 2
   fi
 
   # create the alias
-  if [ -z "$vars" ]; then 
+  if [ -z "$vars" ];
+  then 
     alias "$alias_name"="$cmd"
   else 
     alias "$alias_name"="$vars $cmd"; 
@@ -252,7 +288,8 @@ function force_alias()
 
   # extract environment variables
   local vars=""
-  while [[ "$full_cmd" =~ ^[A-Za-z_]+[A-Za-z0-9_]*= ]]; do
+  while [[ "$full_cmd" =~ ^[A-Za-z_]+[A-Za-z0-9_]*= ]]; 
+  do
     var="${full_cmd%% *}"
     vars="$vars $var"
     full_cmd="${full_cmd#* }"
@@ -263,12 +300,14 @@ function force_alias()
   local cmd="$(safe_echo -e "${full_cmd}" | sed -e 's/^[[:space:]]*//')"
 
   # reset cache for this command
-  if [ -f "$package_cache" ]; then
+  if [ -f "$package_cache" ];
+  then
     sed -i "/^$cmd$/d" "$package_cache"
   fi
 
   # extract base command ignoring sudo
-  if [[ "$cmd" =~ ^sudo[[:space:]]+ ]]; then
+  if [[ "$cmd" =~ ^sudo[[:space:]]+ ]];
+  then
     local base=$(safe_echo "$cmd" | awk '{for (i=2; i<=NF; i++) {print $i; exit}}')
   else
     local base=$(safe_echo "$cmd" | awk '{print $1}')
@@ -277,16 +316,19 @@ function force_alias()
   # install source package of commands if it doesn't exist
   install_required_package -n "$base" 
   
-  if [ "$?" -eq 1 ]; then
+  if [ "$?" -eq 1 ];
+  then
     safe_echo -e "NOTE: Please install package for $base manually and rerun script for aliasing\n"
     return 1
-  elif [ "$?" -eq 2 ]; then
+  elif [ "$?" -eq 2 ];
+  then
     safe_echo -e "ERROR: Please install package for $base manually and rerun script for aliasing"
     return 2
   fi
 
   # create the alias
-  if [ -z "$vars" ]; then 
+  if [ -z "$vars" ];
+  then 
     alias "$alias_name"="$cmd"
   else 
     alias "$alias_name"="$vars $cmd"; 

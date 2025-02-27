@@ -1,33 +1,39 @@
 #!/bin/sh
 
 # Check on Linux
-if [[ "$OSTYPE" != "linux-gnu" ]]; then
+if [[ "$OSTYPE" != "linux-gnu" ]];
+then
   echo "ERROR: script is only for Linux boot"
   return 1
 fi
 
 # Check if script is being run as root
-if ! type sudo &> /dev/null; then
+if ! type sudo &> /dev/null;
+then
   echo -n "ERROR: \"sudo\" must be installed before running boot script"
   return 1
 fi
 sudoer=true
-if ! sudo -v 2> /dev/null; then
+if ! sudo -v 2> /dev/null;
+then
   sudoer=false
 fi 
-if [ "$sudoer" = false ]; then
+if [ "$sudoer" = false ];
+then
   echo -e "\nERROR: User must be on sudoer list to install packages"
   return 1
 fi
 
 # Run asahi bless executable
-if ! type asahi-bless &> /dev/null; then
+if ! type asahi-bless &> /dev/null;
+then
   echo -n "ERROR: \"asahi-bless\" must be installed before running boot script"
   return 1
 fi
 sudo asahi-bless
 
 # Reboot
-if [ "$1" == "-r" ]; then
+if [ "$1" == "-r" ];
+then
   reboot
 fi

@@ -3,7 +3,8 @@
 PERCENTAGE="$(pmset -g batt | grep -Eo "\d+%" | cut -d% -f1)"
 CHARGING="$(pmset -g batt | grep 'AC Power')"
 
-if [ "$PERCENTAGE" = "" ]; then
+if [ "$PERCENTAGE" = "" ];
+then
   exit 0
 fi
 
@@ -19,7 +20,8 @@ case "${PERCENTAGE}" in
   *) ICON=""
 esac
 
-if [[ "$CHARGING" != "" ]]; then
+if [[ "$CHARGING" != "" ]];
+then
   ICON=""
 fi
 

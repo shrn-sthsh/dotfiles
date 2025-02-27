@@ -3,13 +3,16 @@
 
 # import print utilities
 terminal_source_file="$HOME/.dotfiles/shell/util/terminal.sh"
-if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]]; then
+if [[ ! " ${BASH_SOURCE[@]} " =~ " $terminal_source_file " ]];
+then
 
-  if [ -f $terminal_source_file ]; then
+  if [ -f $terminal_source_file ];
+  then
     source $terminal_source_file
 
   else
-    if [[ $- != *i* ]]; then
+    if [[ $- != *i* ]];
+    then
       echo "ERROR: VPN commands require 'safe_echo' command from terminal utility"
     fi
 
@@ -21,9 +24,10 @@ fi
 ## Default universal X clipboard
 # try xsel then xclip if fails
 status=0
-safe_alias sclip="xsel -b" || status=1
-if [ "$status" -ne 0 ]; then
-  safe_alias sclip="xclip" || status=1
+safe_alias scb="xsel -b" || status=1
+if [ "$status" -ne 0 ];
+then
+  safe_alias scb="xclip -selection clipboard" || status=1
 fi
 
 
@@ -36,11 +40,13 @@ function terminate_ssh_socket()
   local remote_clipboard="$3"
 
   # wait until no other processes are using the socket
-  while true; do
+  while true;
+  do
     local active_sessions
     active_sessions=$(pgrep -af "ssh .* -oControlPath=$socket" | wc -l)
 
-    if [[ "$active_sessions" -le 1 ]]; then
+    if [[ "$active_sessions" -le 1 ]];
+    then
       break
     fi
 
@@ -61,7 +67,8 @@ function csh()
   # parse arguments and options
   local HOST=""
   local ARGS=()
-  while [[ $# -gt 0 ]]; do
+  while [[ $# -gt 0 ]];
+  do
     case "$1" in
       -*) ARGS+=("$1") ;; # options
       *)  HOST="$1" ;;    # arguments
@@ -70,7 +77,8 @@ function csh()
   done
 
   # ensure a host argument is provided
-  if [[ -z "$1" ]]; then
+  if [[ -z "$1" ]];
+  then
     safe_echo "Error: No host specified"
     return 1
   fi
@@ -97,8 +105,10 @@ function csh()
     set -e
     set -o pipefail
 
-    while true; do
-      if [[ "$OSTYPE" == "darwin"* ]]; then
+    while true;
+    do
+      if [[ "$OSTYPE" == "darwin"* ]];
+      then
         command ssh -X -S$socket -tt "$HOST" "cat $remote_clipboard" 2> /dev/null | pbcopy
       else
         command ssh -X -S$socket -tt "$HOST" "cat $remote_clipboard" 2> /dev/null | xsel -b

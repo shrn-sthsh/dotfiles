@@ -1,21 +1,25 @@
 #!/bin/sh
 
 # Check on macOS
-if [[ "$OSTYPE" != "darwin"* ]]; then
+if [[ "$OSTYPE" != "darwin"* ]];
+then
   echo "ERROR: script is only for macOS boot"
   return 1
 fi
 
 # Check if script is being run as root
-if ! type sudo &> /dev/null; then
+if ! type sudo &> /dev/null;
+then
   echo -n "ERROR: \"sudo\" must be installed before running boot script"
   return 1
 fi
 sudoer=true
-if ! sudo -v 2> /dev/null; then
+if ! sudo -v 2> /dev/null;
+then
   sudoer=false
 fi 
-if [ "$sudoer" = false ]; then
+if [ "$sudoer" = false ];
+then
   echo -e "\nERROR: User must be on sudoer list to install packages"
   return 1
 fi
@@ -29,7 +33,8 @@ current_volume=$(diskutil info "$current_device" | grep "Volume Name:" | awk '{f
 boot_volumes=()
 while IFS= read -r volume; do
   # Check if the volume name does not contain "Data"
-  if [[ ! $volume =~ Data ]]; then
+  if [[ ! $volume =~ Data ]];
+  then
     boot_volumes+=("$volume")
   fi
 done < <(ls /Volumes)
@@ -40,7 +45,8 @@ for i in "${!boot_volumes[@]}"; do
   volume=${boot_volumes[$i]}
 
   # Mark the current boot volume with an asterisk
-  if [[ "$current_volume" == "$volume" ]]; then
+  if [[ "$current_volume" == "$volume" ]];
+  then
     echo "* $((i+1))) $volume"
   else
     echo "  $((i+1))) $volume"
@@ -49,7 +55,8 @@ done
 
 # User selection
 read -p "==> " choice
-if ! [[ "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -gt "${#boot_volumes[@]}" ]; then
+if ! [[ "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -gt "${#boot_volumes[@]}" ];
+then
   echo "Invalid selection"
   exit 1
 fi

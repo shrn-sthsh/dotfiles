@@ -5,7 +5,8 @@
 # echo only in interactive shell
 function safe_echo()
 {
-  if [[ $- == *i* ]]; then
+  if [[ $- == *i* ]];
+  then
     echo "$@"
   fi
 
@@ -28,7 +29,8 @@ function clean()
 {
   clear
 
-  if type fetch &> /dev/null; then
+  if type fetch &> /dev/null;
+  then
     echo ""
     fetch 
     echo ""
@@ -41,14 +43,16 @@ CUSTOM_PROMPT_SET=false
 function set_bash_prompt()
 {
   # check if prompt is already set
-  if [[ "$CUSTOM_PROMPT_SET" == true ]]; then
+  if [[ "$CUSTOM_PROMPT_SET" == true ]];
+  then
     safe_echo "ABORT: bash prompt already set"
     return 0
   fi
 
   # ANSI bash terminal colors
 
-  if [[ "$0" == *zsh* ]]; then
+  if [[ "$0" == *zsh* ]];
+  then
     local    RED="$red"
     local  GREEN="$green"
     local YELLOW="$yellow"
@@ -72,7 +76,8 @@ function set_bash_prompt()
   export VIRTUAL_ENV_DISABLE_PROMPT=1
 
   # prepend new line for TTY for MacBook curved bezels
-  if ! pgrep -x sway &> /dev/null || ! pgrep -x gnome &> /dev/null; then
+  if ! pgrep -x sway &> /dev/null || ! pgrep -x gnome &> /dev/null;
+  then
     export prompt="\n"
   else
     export prompt=""
@@ -81,13 +86,15 @@ function set_bash_prompt()
   # python environment symbols
   function space-open-bracket-symbol()
   {
-    if [[ -n $(parse_python_env) ]]; then
+    if [[ -n $(parse_python_env) ]];
+    then
       safe_echo -n " {"
     fi
   }
   function close-bracket-symbol()
   {
-    if [[ -n $(parse_python_env) ]]; then
+    if [[ -n $(parse_python_env) ]];
+    then
       safe_echo -n "}"
     fi
   }
@@ -95,13 +102,15 @@ function set_bash_prompt()
   # git branch symbol
   function resolve-symbol()
   {
-    if [[ -n $(parse_git_branch) ]]; then
+    if [[ -n $(parse_git_branch) ]];
+    then
       safe_echo -n "::"
     fi
   }
 
   # set style and colors
-  if [[ "$0" == *zsh* ]]; then
+  if [[ "$0" == *zsh* ]];
+  then
     prompt=$prompt"${YELLOW}\*"
     prompt=$prompt"${CLEAR}\`space-open-bracket-symbol\`"
     prompt=$prompt"${GREEN}\`parse_python_env\`"
@@ -133,7 +142,8 @@ function set_bash_prompt()
 }
 
 # New line after commands but top command will not be affected through clear for PTS
-if pgrep -x sway > /dev/null || ! pgrep -x gnome > /dev/null; then
+if pgrep -x sway > /dev/null || ! pgrep -x gnome > /dev/null;
+then
   PROMPT_COMMAND="export PROMPT_COMMAND=echo"
   alias clear="unset PROMPT_COMMAND; clear; PROMPT_COMMAND='export PROMPT_COMMAND=echo';"
 else
@@ -144,7 +154,8 @@ fi
 function parse_git_branch()
 {
   BRANCH=`command git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-  if [ ! "${BRANCH}" == "" ]; then
+  if [ ! "${BRANCH}" == "" ];
+  then
     echo "<${BRANCH}>"
   else
     echo ""
@@ -155,7 +166,8 @@ function parse_git_branch()
 function git_branch_junction()
 {
   BRANCH=`command git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-  if [ ! "${BRANCH}" == "" ]; then
+  if [ ! "${BRANCH}" == "" ];
+  then
     safe_echo "::"
   else
     safe_echo ""
@@ -163,9 +175,11 @@ function git_branch_junction()
 }
 
 # conda set up
-if type conda &> /dev/null; then
+if type conda &> /dev/null;
+then
   conda_setup="$('/path/to/conda' 'shell.bash' 'hook' 2> /dev/null)"
-  if [ $? -eq 0 ]; then
+  if [ $? -eq 0 ];
+  then
     eval "$conda_setup"
 
     conda config --set auto_activate_base false 
@@ -173,7 +187,8 @@ if type conda &> /dev/null; then
 
     conda deactivate
   else
-    if [ -f "/path/to/conda/etc/profile.d/conda.sh" ]; then
+    if [ -f "/path/to/conda/etc/profile.d/conda.sh" ];
+    then
       source "/path/to/conda/etc/profile.d/conda.sh"
     else
       export PATH="/path/to/conda/bin:$PATH"
@@ -185,9 +200,11 @@ fi
 # current python environment
 function parse_python_env()
 {
-  if [ -n "$VIRTUAL_ENV" ]; then
+  if [ -n "$VIRTUAL_ENV" ];
+  then
     safe_echo "$(basename "$VIRTUAL_ENV")"
-  elif [ -n "$CONDA_DEFAULT_ENV" ]; then
+  elif [ -n "$CONDA_DEFAULT_ENV" ];
+  then
     safe_echo "$CONDA_DEFAULT_ENV"
   else
     safe_echo ""

@@ -2,49 +2,61 @@
 
 ## Terminal
 # default editor
-export VISUAL=nvim
+export VISUAL="nvim"
 export EDITOR="$VISUAL"
 
 ## Files
 # shell configurations
-if [[ "$0" == *zsh* ]]; then
+if [[ "$0" == *zsh* ]];
+then
   export rc="$HOME/.zshrc"
   export pf="$HOME/.zshenv"
 
-elif [[ "$0" == *bash* ]]; then
+elif [[ "$0" == *bash* ]];
+then
   export rc="$HOME/.bashrc"
   export pf="$HOME/.bash_profile"
 fi
 
 ## Directories
 # common
-if [ -d "$HOME/.dotfiles" ]; then
-  export rc="$HOME/.dotfiles"
+if [ -d "$HOME/.dotfiles" ];
+then
+  export dot="$HOME/.dotfiles"
 fi
-if [ -d "$HOME/Desktop" ]; then
+if [ -d "$HOME/Desktop" ];
+then
   export desk="$HOME/Desktop"
 fi
-if [ -d "$HOME/Documents" ]; then
+if [ -d "$HOME/Documents" ];
+then
   export docs="$HOME/Documents"
 fi
-if [ -d "$HOME/Downloads" ]; then
+if [ -d "$HOME/Downloads" ];
+then
   export down="$HOME/Downloads"
 fi
-if [ -d "$HOME/Music" ]; then
+if [ -d "$HOME/Music" ];
+then
   export musi="$HOME/Music"
 fi
-if [ -d "$HOME/Projects" ]; then
+if [ -d "$HOME/Projects" ];
+then
   export proj="$HOME/Projects"
 fi
-if [ -d "$HOME/Public" ]; then
+if [ -d "$HOME/Public" ];
+then
   export pub="$HOME/Public"
 fi
-if [ -d "$HOME/School" ]; then
+if [ -d "$HOME/School" ];
+then
   export sch="$HOME/School"
 fi
-if [ -d "$HOME/System" ]; then
+if [ -d "$HOME/System" ];
+then
   export sys="$HOME/System"
 fi
-if [ -d "$HOME/Videos" ]; then
+if [ -d "$HOME/Videos" ];
+then
   export vids="$HOME/Videos"
 fi
