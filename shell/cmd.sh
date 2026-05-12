@@ -221,7 +221,7 @@ then
   last=0
 
   safe_alias dsp="brightnessctl set" || last=1
-  if [ "$last" -eq 0 ];
+  if [ "$last" == 0 ];
   then
     alias kbd="brightnessctl --device='kbd_backlight' set" || status=1
 
@@ -260,7 +260,7 @@ then
   else
     last=0
     safe_alias cb="xsel -b" || last=1
-    if [ "$last" ne 0 ];
+    if [ "$last" -ne 0 ];
     then
       safe_alias cb="xclip -selection clipboard" || status=1
     fi
@@ -276,7 +276,7 @@ safe_alias fetch="fastfetch" || status=1
 # files
 last=0
 safe_alias ls="eza" || last=1
-if [ "$last" -eq 0 ];
+if [ "$last" == 0 ];
 then
   alias ll="eza -lh"
   alias tree="eza --tree"
@@ -292,10 +292,8 @@ safe_alias cat="bat --theme=ansi" || status=1
 # changing directories
 last=0
 install_required_package "zoxide" || last=1
-if [ "$last" -eq 0 ];
+if [ "$last" == 0 ];
 then
-  eval "$(zoxide init bash)"
-
   function cd()
   {
     if [[ "$1" == "..." ]];
@@ -347,7 +345,7 @@ function cmv()
   local target="${@: -1}"
   mv "$@"
 
-  if [ $? -eq 0 ] && [ -d "$target" ]; 
+  if [ $? == 0 ] && [ -d "$target" ]; 
   then cd "$target"; fi
 }
 
@@ -363,7 +361,7 @@ function cmkdir()
   local dir="$1"
   mkdir "$@"
 
-  if [ $? -eq 0 ]; 
+  if [ $? == 0 ]; 
   then cd "$dir"; fi
 }
 
@@ -372,11 +370,11 @@ safe_alias fb="ranger" || status=1
 
 # file viewer
 install_required_package "zathura" || last=1
-if [ "$last" -eq 0 ];
+if [ "$last" == 0 ];
 then
   function fw()
   {
-    if [ "$#" -eq 0 ];
+    if [ "$#" == 0 ];
     then
       if [[ $- == *i* ]];
       then
@@ -397,16 +395,13 @@ then
   install_required_package "zathura-girara"
   install_required_package "zathura-synctex"
 
-elif [ "$last" -eq 1 ];
+elif [ "$last" == 1 ];
 then
   status=1
 fi
 
 # line count
 safe_alias lc="xargs wc -l" || status=1
-
-# docker
-safe_alias docker="sudo docker" || status=1
 
 # system drivers
 if [[ "$OSTYPE" == "linux-gnu" ]];
@@ -430,13 +425,13 @@ fi
 # neovim
 last=0
 safe_alias vim="nvim" || last=1
-if [ "$last" -eq 0 ];
+if [ "$last" == 0 ];
 then
   alias vi="nvim"
   alias vimdiff="nvim -d"
   alias nvimdiff="nvim -d"
 
-elif [ "$last" -eq 1 ];
+elif [ "$last" == 1 ];
 then
   status=1
 fi
@@ -447,11 +442,12 @@ safe_alias vcs="git"
 
 # tmux
 last=0
-safe_alias list-sessions="tmux list-sessions" || last=1
-if [ "$last" -eq 0 ];
+safe_alias tls="tmux list-sessions" || last=1
+if [ "$last" == 0 ];
 then
-  alias kill-session="tmux kill-session -t"
-  alias kill-server="tmux kill-server"
+  alias tks="tmux kill-session -t"
+  alias tkv="tmux kill-server"
+  alias tup="eval $(tmux showenv -s | grep -E '(SSH|DISPLAY)')"
 
 elif [ "$last" == 1 ];
 then
@@ -462,6 +458,7 @@ fi
 if [[ "$OSTYPE" == "linux-gnu" ]];
 then
   safe_alias lock="vlock" || status=1
+  alias lockscreen="$dotfiles/packages/sway/lockscreen.sh"
 fi
 
 ## Languages

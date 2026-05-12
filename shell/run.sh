@@ -134,7 +134,7 @@ set -o vi
 # Double console font size if running in Linux TTY
 if [[ "$OSTYPE" == "linux-gnu" ]] && [[ "$(tty)" =~ "/dev/tty" ]] && [[ "$-" == *i* ]];
 then
-  setfont ter-u32n
+  stty rows 45 cols 160
   sleep 1.5
 fi
 
@@ -142,4 +142,11 @@ fi
 if [[ "$aliasing_success" == true ]] && type clean &> /dev/null;
 then
   clean
+fi
+
+# Zoxide setup
+if type zoxide &> /dev/null;
+then
+  eval "$(zoxide init bash)"
+  export _ZO_DOCTOR=0
 fi

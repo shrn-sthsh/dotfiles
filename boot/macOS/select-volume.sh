@@ -3,7 +3,7 @@
 # Check on macOS
 if [[ "$OSTYPE" != "darwin"* ]];
 then
-  echo "ERROR: script is only for macOS boot"
+  echo "ERROR: script is only for MacOS boot"
   return 1
 fi
 

@@ -57,7 +57,7 @@ include /etc/sway/config.d/*
 
 # Basics
   # Super Key
-  set $mod Mod4
+  set $mod Mod1
 
   # Home row direction keys, like vim
   set $left  h
@@ -75,6 +75,11 @@ include /etc/sway/config.d/*
     --height 35% \
     | xargs swaymsg exec --
 
+  # Make CapsLock into control
+  input type:keyboard {
+      xkb_options ctrl:nocaps
+  }
+
 # Trackpad
 input "1452:851:Apple_MTP_multi-touch" {
   dwt enabled
@@ -82,6 +87,12 @@ input "1452:851:Apple_MTP_multi-touch" {
   middle_emulation enabled
 }
 bindsym XF86LaunchA input type:touchpad events toggle enabled disabled
+
+# Mouse
+input "1133:45107:LIFT_B_Mouse" {
+    accel_profile flat
+    pointer_accel -0.30
+}
 
 # Key bindings
   # Start a terminal
@@ -134,16 +145,16 @@ bindsym XF86LaunchA input type:touchpad events toggle enabled disabled
 
   # Workspaces:
     # Define Greek names for workspaces
-    set $ws1 α
-    set $ws2 β
-    set $ws3 γ
-    set $ws4 δ
-    set $ws5 ε
-    set $ws6 θ
-    set $ws7 λ
-    set $ws8 μ
-    set $ws9 π
-    set $ws0 σ
+    set $ws1 1
+    set $ws2 2
+    set $ws3 3
+    set $ws4 4
+    set $ws5 5
+    set $ws6 6
+    set $ws7 7
+    set $ws8 8
+    set $ws9 9
+    set $ws0 0
 
     # Switch to workspaces by Greek name
     bindsym $mod+1 workspace $ws1
@@ -226,6 +237,11 @@ bindsym XF86LaunchA input type:touchpad events toggle enabled disabled
   bindsym $mod+r mode "resize"
 
 # Display
+  # Addition monitors
+  output "Dell Inc. DELL U3225QE F2RL884" scale 1.8 transform 90     position    0   0
+  output "Unknown Unknown Unknown"        scale 2.0 transform normal position 1195 645
+  output "Dell Inc. DELL U3225QE 4WQL884" scale 1.8 transform 270    position 3330  40
+  
   # Brightness
   bindsym XF86MonBrightnessUp   exec brightnessctl set 2%+
   bindsym XF86MonBrightnessDown exec brightnessctl set 2%-
@@ -241,6 +257,7 @@ bindsym $mod+XF86MonBrightnessDown exec brightnessctl --device='kbd_backlight' s
 # Screen lock
 bindsym XF86Sleep    exec echo ""
 bindsym XF86PowerOff exec bash $HOME/System/sway/lockscreen.sh $wallpaper
+bindsym $mod+Shift+q exec bash $HOME/System/sway/lockscreen.sh $wallpaper
 
 # Audio 
   # Volume

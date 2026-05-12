@@ -13,7 +13,7 @@ then
   else
     if [[ $- != *i* ]];
     then
-      echo "ERROR: macOS volume selection script is missing"
+      echo "ERROR: MacOS volume selection script is missing"
     fi
 
     return 1

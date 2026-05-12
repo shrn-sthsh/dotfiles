@@ -132,12 +132,13 @@ function set_bash_prompt()
     prompt=$prompt"${PURPLE} \`parse_git_branch\`"
     prompt=$prompt"${CLEAR}\`resolve-symbol\`"
     prompt=$prompt"${RED}\W"
-    prompt=$prompt"${CLEAR}]: "
+    prompt=$prompt"${CLEAR}]\n$ "
     prompt=$prompt"${WHITE}"
-
   fi
+
   unset PS1
   export PS1="$prompt"
+
   CUSTOM_PROMPT_SET=true
 }
 
